@@ -1,0 +1,34 @@
+- content_for :meta_title do
+  == #{@cms_config['site_settings']['links_title']} Categories
+
+%h1= large_icon('Folder2') + ' ' + yield(:meta_title).strip
+
+%div.box
+  %span.hmenu
+    = icon "Plus", new_admin_link_category_path
+    = link_to "Make a new category", new_admin_link_category_path
+  = clear
+
+%br
+
+%table.full_width{ :cellspacing => "0" }
+  %thead
+    %tr
+      %th Name
+      %th{:style => "width: 100px;"}= @cms_config['site_settings']['link_title'].pluralize
+      %th{:style => "width: 100px;"} Options
+  %tbody
+    - for link_category in @link_categories do
+      %tr[link_category]{ :class => cycle('odd','even') }
+        %td= link_to h(link_category.title), edit_admin_link_category_path(link_category)
+        %td= number_with_delimiter(link_category.links.count)
+        %td
+          = icon "Write", edit_admin_link_category_path(link_category)
+          = trash_icon(link_category, admin_link_category_path(link_category), "the #{link_category.title} category") unless link_category.links.size > 0
+
+%br
+
+%p
+  %strong Note about deleting categories:
+  == You can only delete categories without #{@cms_config['site_settings']['link_title'].pluralize} assigned to it.
+  

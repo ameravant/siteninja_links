@@ -1,0 +1,9 @@
+- content_for(:title) { concat "New #{@cms_config['site_settings']['links_title']}" }
+
+%h1
+  Upload a New
+  =@cms_config['site_settings']['links_title']
+
+- form_for [:admin, @link], :html => { :multipart => true, :onsubmit => "form_submitted('Saving, please wait...')" } do |f|
+  = render :partial => "form", :locals => { :f => f }
+

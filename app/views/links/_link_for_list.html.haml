@@ -1,0 +1,10 @@
+.link_for_list
+  %h2= link_to(link_for_list.title, [link_for_list.link_category, link_for_list])
+  - unless link_for_list.images.empty?
+    %div{:class => "images small"}
+      - image = link_for_list.images.sort_by(&:position).first
+      = link_to image_tag(image.small_thumbnail), link_for_list, :title => h(image.image_title)
+      = clear
+  %p= h(link_for_list.blurb.strip)
+  %p= link_to("Visit site", link_for_list.url)
+  = clear

@@ -1,0 +1,46 @@
+%fieldset
+
+  = f.error_messages
+
+  %div{:class => "form-option #{cycle('even', 'odd')}"}
+    = f.label :title, "Title", :class => "big"
+    = f.text_field :title, :size => 50, :class => "big"
+  %div{:class => "form-option #{cycle('even', 'odd')}"}
+    = f.label :link_category_id, "Category"
+    = f.select :link_category_id, LinkCategory.find(:all).collect {|p| [p.title, p.id]}
+    -if @link_categories.blank?
+      %span{:style => "color:#FF0000"}
+        Please create at least one category before trying to save 
+  %div{:class => "form-option #{cycle('even', 'odd')}"}
+    = f.label :url
+    = f.text_field :url, :size => 50
+  %div{:class => "form-option #{cycle('even', 'odd')}"}
+    = f.label :tag_list
+    = f.text_field :tag_list, :size => 50
+  %div{:class => "form-option #{cycle('even', 'odd')}"}
+    .options-title Options
+    .options
+      = f.check_box :public
+      = f.label :public, "Approve for public viewing"
+    = clear
+
+  %h2= f.label :blurb
+
+  %div
+    = f.text_area :blurb, :size => "80x5", :class => "full_width"
+    %br
+
+  %h2= f.label :body
+  .options
+    - unless @link.images.empty?
+      = render :partial => "admin/shared/image_options", :locals => {:images => @link.images}
+  %div
+    = f.text_area :body, :size => "100x40", :class => "mceEditor"
+    %br
+
+  %div
+    = submit_tag "Save link"
+    or
+    = link_to "cancel", admin_links_path
+    = clear
+

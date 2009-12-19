@@ -1,0 +1,73 @@
+- content_for :head do
+  %style{:type => "text/css", :media => "screen"}
+    ul.sortable { list-style: none; margin: 4px 0 0 -30px; }
+    ul.sortable ul { margin: 4px 0 0 -20px; }
+    ul.sortable li { line-height: 2em; }
+    div.link-title-header { float: left; width: 60px; font-weight: bold; color: #666; margin: 0 0 0 10px; }
+    div.link-options-header { float: right; width: 60px; text-align: left; font-weight: bold; color: #666; }
+    div.link-images-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
+    div.link-testimonials-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
+    div.link-status-header { float: right; width: 150px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
+    div.link-images { float: left; margin-right: 20px; }
+    div.link-title { float: left; margin-right: 20px; }
+    div.link-options { text-align: right; float: right; width: 60px; }
+    div.link-images { float: right; margin-right: 20px; width: 100px; text-align: left; }
+    div.link-testimonials { float: right; margin-right: 20px; width: 100px; text-align: left; }
+    div.link-status { float: right; margin-right: 20px; width: 150px; text-align: left; }
+    ul.sortable li { border-bottom: #ccc 1px solid; }
+    h2.category { font-family: Tahoma, Arial, sans-serif; font-size: 1.2em; margin: 20px 0px 0px 10px}
+%h1= large_icon('Link') + ' ' + "#{@cms_config['site_settings']['links_title']}"
+
+.box
+  #reorder_status.gray.float-right{:style => "display: none"}
+    = spinner
+    Reordering
+    = @cms_config['site_settings']['links_title']
+    \...
+  %span.hmenu
+    = icon "Plus", new_admin_link_path
+    = link_to "Make a new #{@cms_config['site_settings']['links_title']}", new_admin_link_path
+  %span.hmenu
+    = icon "Folder2", admin_link_categories_path
+    = link_to "Manage Categories", admin_link_categories_path
+
+%br
+%div.link-title-header
+  Title
+%div.link-options-header
+  Options
+%div.link-images-header
+  Images
+%div.link-status-header
+  Status
+= clear
+- for link_category in @link_categories
+  %h2.category= link_to(link_category.title, [:edit, :admin, link_category])
+  %ul.sortable{:id => "tree_#{link_category.id}"}
+    - for link in link_category.links.sort_by(&:position)
+      %li{:id => "#{dom_id(link)}"}
+        .link-title
+          = image_tag("#{move_loc}", :class => "icon handle")
+          = link_to(link.title, [:edit, :admin, link])
+        .link-options
+          -if link.images_count > 0
+            - if link.features_count > 0
+              = defeature_icon(link, "/admin/links/#{link.to_param}/features/1", link.title, "inline")
+              = feature_icon(link, [:admin, link, :features], link.title, "none")
+            - else
+              = feature_icon(link, [:admin, link, :features], link.title, "inline")
+              = defeature_icon(link, "/admin/links/#{link.to_param}/features/1", link.title, "none")
+          -else
+            =disabled_feature_icon(link, [:new, :admin, link, :feature], link.title)
+          = icon "Write", [:edit, :admin, link]
+          = trash_icon(link, [:admin, link], "#{link.title}")
+        .link-images
+          = icon "Picture", [:admin, link, :images]
+          = link_to link.images_count, [:admin, link, :images]
+          = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
+        .link-status
+          = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
+        = clear
+
+    = sortable_element("tree_#{link_category.id}", :url => reorder_admin_links_path + "?link_category_id=#{link_category.id}", :method => :put, :loading => "$('ajax_spinner').src='#{spinner_loc}'; $('reorder_status').show();", :success => "$('ajax_spinner').src='#{ok_loc}'", :failure => "$('ajax_spinner').src='#{exclamation_loc}'", :complete => visual_effect(:fade, "reorder_status", :delay => 1))
+

@@ -1,0 +1,9 @@
+= f.error_messages
+
+%table{:cellspacing => "0"}
+  %tr
+    %td= f.label :title
+    %td= f.text_field :title
+
+- fancy_submit admin_link_categories_path do
+  = f.submit "Save category"

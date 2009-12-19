@@ -1,0 +1,22 @@
+- unless @link_categories.empty?
+  - content_for :side_column do
+    %h2.top-headline Categories
+    %ul.list_of_links
+      - for category in @link_categories
+        - unless category.links.empty?
+          - if @link_category and @link_category == category
+            %li.sidebar_link_active= h(category.title)
+          - else
+            %li= link_to h(category.title), category 
+
+          
+          
+- unless @link_tags.empty?
+  - content_for :side_column do
+    %h2 Tags
+    %ul.article_tags.list_of_links
+      - for tag in @link_tags
+        - if params[:tag] == tag.name
+          %li.sidebar_link_active= h(tag.name)
+        - else
+          %li[tag]= link_to h(tag.name), links_path(:tag => tag.name)
