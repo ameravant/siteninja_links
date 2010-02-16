@@ -1,4 +1,5 @@
 class LinksController < ApplicationController
+  unloadable
   before_filter :get_links_side
   add_breadcrumb "Home", "root_path"
 
@@ -22,7 +23,7 @@ class LinksController < ApplicationController
 
   def show
     @link = Link.find(params[:id])
-    @images = Link.images
+    @images = @link.images
     @link_category = @link.link_category
     add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
     add_breadcrumb @link.link_category.title, link_category_path(@link.link_category)
