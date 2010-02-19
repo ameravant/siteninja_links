@@ -8,7 +8,7 @@ class Link < ActiveRecord::Base
   named_scope :active, {:conditions => {:public => true}}
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
-  
+  has_many :menus, :as => :navigatable, :dependent => :destroy
   def to_param
     "#{self.id}-#{self.permalink}"
   end

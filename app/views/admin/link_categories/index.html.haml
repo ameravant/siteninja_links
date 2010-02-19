@@ -23,6 +23,10 @@
         %td= link_to h(link_category.title), edit_admin_link_category_path(link_category)
         %td= number_with_delimiter(link_category.links.count)
         %td
+          - if link_category.menus_count > 0
+            = navigation_icon(link_category, link_category.title, "inline")
+          - else
+            = activate_navigation_icon(link_category, [:new, :admin, link_category, :menu], link_category.title, "inline")
           = icon "Write", edit_admin_link_category_path(link_category)
           = trash_icon(link_category, admin_link_category_path(link_category), "the #{link_category.title} category") unless link_category.links.size > 0
 
