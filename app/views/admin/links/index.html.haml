@@ -50,15 +50,7 @@
           = image_tag("#{move_loc}", :class => "icon handle")
           = link_to(link.title, [:edit, :admin, link])
         .link-options
-          -if link.images_count > 0
-            - if link.features_count > 0
-              = defeature_icon(link, "/admin/links/#{link.to_param}/features/1", link.title, "inline")
-              = feature_icon(link, [:admin, link, :features], link.title, "none")
-            - else
-              = feature_icon(link, [:admin, link, :features], link.title, "inline")
-              = defeature_icon(link, "/admin/links/#{link.to_param}/features/1", link.title, "none")
-          -else
-            =disabled_feature_icon(link, [:new, :admin, link, :feature], link.title)
+          = feature_icon_select(link, link.title)
           = icon "Write", [:edit, :admin, link]
           = trash_icon(link, [:admin, link], "#{link.title}")
         .link-images
