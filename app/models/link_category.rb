@@ -8,4 +8,7 @@ class LinkCategory < ActiveRecord::Base
 	def to_param
 	 "#{self.id}-#{self.permalink}"
 	end
+	def name
+	  self.title
+	end
 end

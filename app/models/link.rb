@@ -29,4 +29,7 @@ class Link < ActiveRecord::Base
       self.blurb
     end
   end
+  def name
+    self.title
+  end
 end
