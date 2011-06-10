@@ -10,6 +10,8 @@ class Link < ActiveRecord::Base
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :menus, :as => :navigatable, :dependent => :destroy
   default_scope :order => :position
+  accepts_nested_attributes_for :images
+  
   def to_param
     "#{self.id}-#{self.permalink}"
   end
