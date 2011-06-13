@@ -5,7 +5,13 @@
       - image = link_for_list.images.sort_by(&:position).first
       = link_to image_tag(image.small_thumbnail), [link_for_list.link_category, link_for_list], :title => h(image.image_title)
       = clear
-  = simple_format(link_for_list.blurb)
-  - unless link_for_list.url.blank?
-    = link_to("Visit site", link_for_list.url)
+  - unless link_for_list.blurb.blank?
+    = simple_format(link_for_list.blurb)
+  .visit-site
+    - unless link_for_list.url.blank?
+      = link_to("Visit site", link_for_list.url)
   = clear
+  
+- content_for :head do
+  %style{:type => "text/css"}
+    == .visit-site { margin-bottom: 20px; }
