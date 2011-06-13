@@ -1,12 +1,13 @@
 - content_for :meta_title do
   = @link.title
 %h1= link_to(@link.title, @link.url)
-%p= @link.body.blank? ? @link.blurb : ninja_parse(@link.body)
-%p= link_to("Visit site", @link.url)
+= @link.body.blank? ? @link.blurb : ninja_parse(@link.body)
+- unless link_for_list.url.blank?
+  %p= link_to("Visit site", @link.url)
 = clear
 - unless @link.tags.empty?
   %p
     Tags:
-    = @link.tags.collect{|tag| link_to(tag, "/links?tag=#{URI.escape(tag.name)}")}.join(', ')
+    = @link.tags.collect{|tag| link_to h(tag.name), links_path(:tag => tag.name)}.join(', ')
 = render :partial => "sidebar"
 

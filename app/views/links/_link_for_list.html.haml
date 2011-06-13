@@ -6,5 +6,6 @@
       = link_to image_tag(image.small_thumbnail), [link_for_list.link_category, link_for_list], :title => h(image.image_title)
       = clear
   = link_for_list.blurb
-  %p= link_to("Visit site", link_for_list.url)
+  - unless link_for_list.url.blank?
+    %p= link_to("Visit site", link_for_list.url)
   = clear
