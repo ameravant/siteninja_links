@@ -7,6 +7,6 @@
 %h1= yield(:meta_title)
 =will_paginate @links
 = render :partial => "link_for_list", :collection => @links
-
+=will_paginate @links
 = render :partial => "sidebar"
 

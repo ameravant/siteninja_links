@@ -13,7 +13,7 @@ class LinksController < ApplicationController
       add_breadcrumb @cms_config['site_settings']['links_title']
       all_links = Link.find(:all, :conditions => {:public => true, :featured => true}, :order => :title)
     end
-		@links = all_links.paginate(:page => params[:page], :per_page => 8)
+		@links = all_links.paginate(:page => params[:page], :per_page => 20)
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml { render :xml => all_links.to_xml }
