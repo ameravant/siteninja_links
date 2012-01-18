@@ -43,7 +43,7 @@
         %br
         = render :partial => "admin/shared/parser_help"
         - unless @link.title.blank?
-          = link_to("#{icon('Picture')} Attached Image", admin_event_images_path(@link, :fancy => "true"), :class => "fancy-iframe")
+          = link_to("#{icon('Picture')} Attached Image", admin_link_images_path(@link, :fancy => "true"), :class => "fancy-iframe")
         = render :partial => "admin/shared/asset_options"
         = render :partial => "admin/shared/insert_map"
 
