@@ -6,7 +6,10 @@
   #main-details.options
     %h3 Details
     = f.check_box :public
-    = f.label :public, "Approve for public viewing"
+    = f.label :public, "Approve for Public Viewing"
+    %br
+    = f.check_box :restrict_link
+    = f.label :restrict_link, "Hide #{@cms_config['site_settings']['link_title']} Detail Page", :id => "link_restrict_link_label"
     %br
     = f.label :link_category_id, "Category"
     %br
@@ -51,13 +54,23 @@
       %h2.form-label
         = f.label :body
 
-    = f.text_area :body, :size => "100x40", :class => "mceEditor"
+    = f.text_area :body, :size => "100x80", :class => "mceEditor"
     = clear
   - fancy_submit admin_links_path do
     = f.submit "Save #{@cms_config['site_settings']['link_title']}"
 
 - content_for :head do
-  :javascript
+  %style{:type => "text/css"}
+    - if @link.restrict_link
+      == #body-wrapper { display: none; }
+      == #link_body_ifr { height: 700px !important; }
+  %script{:type => "text/javascript"}
+    jQuery(document).ready(function() {
+    jQuery("#link_restrict_link").click(function()
+    {
+    jQuery("#body-wrapper").toggle();
+    });
+    });
     function addtext(text) {
     tinyMCE.execInstanceCommand("link_body","mceInsertContent",false,text);
     }
