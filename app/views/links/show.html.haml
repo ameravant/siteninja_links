@@ -1,5 +1,7 @@
 - content_for :meta_title do
   = @link.title
+- content_for :meta_description do
+  = @link.description
 %h1= link_to(@link.title, @link.url)
 = @link.body.blank? ? @link.blurb : ninja_parse(@link.body)
 - unless @link.url.blank?
