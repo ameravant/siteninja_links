@@ -11,6 +11,7 @@
 
           
           
+- @link_tags = Link.active.tag_counts[0..(count - 1)].reject{|tag| tag.taggings.reject{|tagging| tagging.taggable_type != "Link"}.empty?}.sort_by(&:name)
 - unless @link_tags.empty?
   - content_for :side_column do
     %h2 Tags
