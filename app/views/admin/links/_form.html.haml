@@ -17,26 +17,26 @@
     %br
     = f.label :description, "Short Description"
     = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "The Short Description is used for the Meta Description and the feature box description of the link."}
-    = f.text_area :description, :style => "width: 250px; height: 60px;"
+    = f.text_area :description, :class => "small-area"
     %br
     = f.label :tag_list, "Tags"
-    = f.text_field :tag_list
+    = f.text_field :tag_list, :class => "small-input inline-input"
     .note Separate words or phrases with a comma
   %h2.form-label= f.label :title
   .note
     %span.required *Required
     Title is used to generate the permalink.
-  = f.text_field :title, :class => "big", :size => 80
+  = f.text_field :title, :class => "big-input", :size => 80
 
   %h2.form-label= f.label :url
   .note
     %span.required *Required
-  = f.text_field :url, :class => "big", :size => 80
+  = f.text_field :url, :class => "big-input", :size => 80
 
 
 
   %h2.form-label= f.label :blurb
-  = f.text_area :blurb, :size => "80x5", :style => "width: 550px; height: 110px;"
+  = f.text_area :blurb, :class => "big-area"
 
   = clear
   #body-wrapper
