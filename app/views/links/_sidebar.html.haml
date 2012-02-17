@@ -11,13 +11,13 @@
 
           
           
-/ - @link_tags = Link.active.tag_counts.reject{|tag| tag.taggings.reject{|tagging| tagging.taggable_type != "Link"}.empty?}.sort_by(&:name)
-/ - unless @link_tags.empty?
-/   - content_for :side_column do
-/     %h2 Tags
-/     %ul.article_tags.list_of_links
-/       - tag_cloud @link_tags, %w(tag-size-1 tag-size-2 tag-size-3 tag-size-4) do |tag, css_class|
-/         - if params[:tag] == tag.name
-/           %li{:class => "sidebar_link_active #{css_class}"}= h(tag.name)
-/         - else
-/           %li{:class => "#{css_class}"}[tag]= link_to h(tag.name), links_path(:tag => tag.name)
+- @link_tags = Link.active.tag_counts.reject{|tag| tag.taggings.reject{|tagging| tagging.taggable_type != "Link"}.empty?}.sort_by(&:name)
+- unless @link_tags.empty?
+  - content_for :side_column do
+    %h2 Tags
+    %ul.article_tags.list_of_links
+      - tag_cloud @link_tags, %w(tag-size-1 tag-size-2 tag-size-3 tag-size-4) do |tag, css_class|
+        - if params[:tag] == tag.name
+          %li{:class => "sidebar_link_active #{css_class}"}= h(tag.name)
+        - else
+          %li{:class => "#{css_class}"}[tag]= link_to h(tag.name), links_path(:tag => tag.name)
