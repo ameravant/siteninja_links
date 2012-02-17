@@ -41,7 +41,6 @@ class LinksController < ApplicationController
       @link_categories = LinkCategory.find(:all)
       @all_links = Link.find_tagged_with(params[:id], :order => "links.created_at desc", :conditions => { :public => true })
       @links = @all_links.paginate(:page => params[:page], :per_page => 8)
-      @link_tags = Link.active.tag_counts
     else
       if @page = Page.find_by_permalink('links') and params[:action] == "index"
         get_page_defaults(@page)
