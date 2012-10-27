@@ -38,6 +38,8 @@ class LinksController < ApplicationController
   def get_links_side
     if @cms_config['modules']['links']
       render_404 unless @page = Page.find_by_permalink("links")
+      @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
+      @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
       @link_categories = LinkCategory.find(:all)
       @all_links = Link.find_tagged_with(params[:id], :order => "links.created_at desc", :conditions => { :public => true })
       @links = @all_links.paginate(:page => params[:page], :per_page => 8)

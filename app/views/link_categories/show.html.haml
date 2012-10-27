@@ -1,6 +1,7 @@
 - content_for :meta_title do
   = @link_category.title
   = @cms_config['site_settings']['link_title'].pluralize
-%h1= yield(:meta_title)
-= render :partial => "links/link_for_list", :collection => @links
-= render :partial => "links/sidebar"
+= render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "link_categories", :action => "show"}, :collection => @main_column_sections
+
+- if !@cms_config['site_settings']['enable_responsive_layouts']
+  = render :partial => "links/sidebar"

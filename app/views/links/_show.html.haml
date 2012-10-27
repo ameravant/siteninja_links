@@ -1,0 +1,9 @@
+%h1= link_to(@link.title, @link.url)
+= @link.body.blank? ? @link.blurb : ninja_parse(@link.body)
+- unless @link.url.blank?
+  %p= link_to("Visit site", @link.url)
+= clear
+- unless @link.tags.empty?
+  %p
+    Tags:
+    = @link.tags.collect{|tag| link_to h(tag.name), links_path(:tag => tag.name)}.join(', ')

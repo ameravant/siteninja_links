@@ -3,61 +3,65 @@
     = link_to("Please create at least one category before trying to save.", admin_link_categories_path, :class => "required", :style => "color: #AC0000")
 
   = f.error_messages
-  #main-details.options
-    %h3 Details
-    = f.check_box :public
-    = f.label :public, "Approve for Public Viewing"
-    %br
-    = f.check_box :restrict_link
-    = f.label :restrict_link, "Hide #{@cms_config['site_settings']['link_title']} Detail Page", :id => "link_restrict_link_label"
-    %br
-    = f.label :link_category_id, "Category"
-    %br
-    = f.select :link_category_id, LinkCategory.find(:all).collect {|p| [p.title, p.id]}
-    %br
-    = f.label :description, "Short Description"
-    = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "The Short Description is used for the Meta Description and the feature box description of the link."}
-    = f.text_area :description, :class => "small-area"
-    %br
-    = f.label :tag_list, "Tags"
-    = f.text_field :tag_list, :class => "small-input inline-input"
-    .note Separate words or phrases with a comma
-  %h2.form-label= f.label :title
-  .note
-    %span.required *Required
-    Title is used to generate the permalink.
-  = f.text_field :title, :class => "big-input", :size => 80
+  .responsive-form
+    .main-fields
+      %h2.form-label= f.label :title
+      .note
+        %span.required *Required
+        Title is used to generate the permalink.
+      = f.text_field :title, :class => "big-input", :size => 80
 
-  %h2.form-label= f.label :url
-  .note
-    %span.required *Required
-  = f.text_field :url, :class => "big-input", :size => 80
+      %h2.form-label= f.label :url
+      .note
+        %span.required *Required
+      = f.text_field :url, :class => "big-input", :size => 80
 
 
 
-  %h2.form-label= f.label :blurb
-  = f.text_area :blurb, :class => "big-area"
+      %h2.form-label= f.label :blurb
+      = f.text_area :blurb, :class => "big-area"
 
-  = clear
-  #body-wrapper
-    .options#body-details
-      .inserts
-        %strong Insert:
+      = clear
+    #main-details.details.options
+      #options
+        %h3 Details
+        = f.check_box :public
+        = f.label :public, "Approve for Public Viewing"
         %br
-        = render :partial => "admin/shared/parser_help"
-        - unless @link.title.blank?
-          = link_to("#{icon('Picture')} Attached Image", admin_link_images_path(@link, :fancy => "true"), :class => "fancy-iframe")
-        = render :partial => "admin/shared/asset_options"
-        = render :partial => "admin/shared/insert_map"
-
-    %div{:style => "width: 560px;"}
-      %h2.form-label
-        = f.label :body
-
-    = f.text_area :body, :size => "100x80", :class => "mceEditor"
+        = f.check_box :restrict_link
+        = f.label :restrict_link, "Hide #{@cms_config['site_settings']['link_title']} Detail Page", :id => "link_restrict_link_label"
+        %br
+        = f.label :link_category_id, "Category"
+        %br
+        = f.select :link_category_id, LinkCategory.find(:all).collect {|p| [p.title, p.id]}
+        %br
+        = f.label :description, "Short Description"
+        = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "The Short Description is used for the Meta Description and the feature box description of the link."}
+        = f.text_area :description, :class => "small-area"
+        %br
+        = f.label :tag_list, "Tags"
+        = f.text_field :tag_list, :class => "small-input inline-input"
+        .note Separate words or phrases with a comma
     = clear
-  - fancy_submit admin_links_path do
-    = f.submit "Save #{@cms_config['site_settings']['link_title']}"
+    #body-wrapper
+      .options#body-details
+        .inserts
+          %strong Insert:
+          %br
+          = render :partial => "admin/shared/parser_help"
+          - unless @link.title.blank?
+            = link_to("#{icon('Picture')} Attached Image", admin_link_images_path(@link, :fancy => "true"), :class => "fancy-iframe")
+          = render :partial => "admin/shared/asset_options"
+          = render :partial => "admin/shared/insert_map"
+
+      %div{:style => "width: 560px;"}
+        %h2.form-label
+          = f.label :body
+
+      = f.text_area :body, :size => "100x80", :class => "mceEditor"
+      = clear
+    - fancy_submit admin_links_path do
+      = f.submit "Save #{@cms_config['site_settings']['link_title']}"
 
 - content_for :head do
   %style{:type => "text/css"}

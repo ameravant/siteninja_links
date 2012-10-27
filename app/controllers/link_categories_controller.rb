@@ -17,11 +17,16 @@ class LinkCategoriesController < LinksController
       wants.xml { render :xml => all_links.to_xml }
       wants.rss { render :layout => false } # uses index.rss.builder
     end
+    @page = Page.find_by_permalink("links")
+    @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
+    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
   end
 
   def show
   add_breadcrumb @cms_config['site_settings']['links_title'], 'link_categories_path'
     @page = Page.find_by_permalink("links")
+    @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
+    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
     @link_category = LinkCategory.find(params[:id])
     @link_category.menus.empty? ? @menu = @page.menus.first : @menu = @link_category.menus.first
     @links = Link.find(:all, :conditions => {:link_category_id => @link_category.id})

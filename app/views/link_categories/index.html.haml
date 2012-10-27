@@ -4,9 +4,8 @@
   - else
     =@cms_config['site_settings']['links_title']
 
-%h1= yield(:meta_title)
-=will_paginate @links
-= render :partial => "links/link_for_list", :collection => @links
+= render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "link_categories", :action => "index"}, :collection => @main_column_sections
 
-= render :partial => "links/sidebar"
+- if !@cms_config['site_settings']['enable_responsive_layouts']
+  = render :partial => "links/sidebar"
 

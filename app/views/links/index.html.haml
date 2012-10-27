@@ -3,10 +3,12 @@
     == #{@cms_config['site_settings']['link_title'].pluralize} by tag: #{h params[:tag]}
   - else
     =@cms_config['site_settings']['links_title']
-
-%h1= yield(:meta_title)
-=will_paginate @links
-= render :partial => "link_for_list", :collection => @links
-=will_paginate @links
-= render :partial => "sidebar"
-
+- if !@cms_config['site_settings']['enable_responsive_layouts']
+  %h1= yield(:meta_title)
+  =will_paginate @links
+  = render :partial => "link_for_list", :collection => @links
+  =will_paginate @links
+  - if !@cms_config['site_settings']['enable_responsive_layouts']
+    = render :partial => "sidebar"
+- else
+  = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "links", :action => "index"}, :collection => @main_column_sections

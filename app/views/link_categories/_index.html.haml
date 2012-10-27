@@ -1,0 +1,3 @@
+%h1= yield(:meta_title)
+=will_paginate @links
+= render :partial => "links/link_for_list", :collection => @links
