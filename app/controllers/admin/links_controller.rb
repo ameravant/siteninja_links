@@ -29,7 +29,7 @@ class Admin::LinksController < AdminController
       session[:link_index] = "paginate"
       @paginate_link_index = true
       params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
-      @links = links.paginate(:page => params[:page], :per_page => 10)
+      @links = links.paginate(:page => params[:page], :per_page => 20)
     elsif params[:paginate_link_index] == "false"
       session[:link_index] = "categories"
       @paginate_link_index = false
