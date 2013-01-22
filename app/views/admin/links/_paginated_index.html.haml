@@ -1,0 +1,13 @@
+%div.link-title-header
+  Title
+%div.link-options-header
+  Options
+%div.link-images-header
+  Images
+%div.link-status-header
+  Status
+= clear
+%ul.sortable.paginated{:id => "alphabetical-links"}
+  = render :partial => "paginated_link", :collection => @links
+  
+= will_paginate @links

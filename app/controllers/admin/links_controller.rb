@@ -11,6 +11,32 @@ class Admin::LinksController < AdminController
       @links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"])
     end
     add_breadcrumb @cms_config['site_settings']['links_title']
+    
+    
+    if params[:default_view]
+      if params[:default_view] == "paginate"
+        session[:link_index] = "paginate"
+        @cms_config["site_settings"]["paginate_link_index"] = true
+      elsif params[:default_view] == "categories"
+        session[:link_index] = "categories"
+        @cms_config["site_settings"]["paginate_link_index"] = false
+      end
+      flash[:notice] = "Default view updated successfully."
+      File.open(@cms_path, 'w') { |f| YAML.dump(@cms_config, f) }
+      redirect_to(admin_links_path)
+    end
+    if (@cms_config['site_settings']['paginate_link_index'] or params[:paginate_link_index] or session[:link_index] == "paginate") and (params[:paginate_link_index] != "false")
+      session[:link_index] = "paginate"
+      @paginate_link_index = true
+      params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
+      @links = links.paginate(:page => params[:page], :per_page => 10)
+    elsif params[:paginate_link_index] == "false"
+      session[:link_index] = "categories"
+      @paginate_link_index = false
+    end
+    
+    
+    
   end
 
   def show
