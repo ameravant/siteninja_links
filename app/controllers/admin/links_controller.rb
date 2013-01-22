@@ -28,15 +28,16 @@ class Admin::LinksController < AdminController
     if (@cms_config['site_settings']['paginate_link_index'] or params[:paginate_link_index] or session[:link_index] == "paginate") and (params[:paginate_link_index] != "false")
       session[:link_index] = "paginate"
       @paginate_link_index = true
-      params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
+      if params[:letter]
+        links = Link.all(:conditions => ["title like ?", "#{params[:letter]}%"])
+      else
+        params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
+      end
       @links = links.paginate(:page => params[:page], :per_page => 20)
     elsif params[:paginate_link_index] == "false"
       session[:link_index] = "categories"
       @paginate_link_index = false
     end
-    
-    
-    
   end
 
   def show
