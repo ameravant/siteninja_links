@@ -25,6 +25,7 @@ class LinksController < ApplicationController
     @link = Link.find(params[:id])
     @images = @link.images
     @link_category = @link.link_category
+    @menu = @link_category.menus.first if !@link_category.blank? and !@link_category.menus.empty?
     add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
     add_breadcrumb @link.link_category.title, link_category_path(@link.link_category)
     add_breadcrumb @link.title

@@ -76,5 +76,6 @@
     });
     });
     function addtext(text) {
-    tinyMCE.execInstanceCommand("link_body","mceInsertContent",false,text);
+    tinymce.get("link_body").insertContent(text);
+    -#tinyMCE.execInstanceCommand("link_body","mceInsertContent",false,text);
     }
