@@ -29,7 +29,7 @@ class LinkCategoriesController < LinksController
     @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
     @link_category = LinkCategory.find(params[:id])
     @link_category.menus.empty? ? @menu = @page.menus.first : @menu = @link_category.menus.first
-    @links = Link.find(:all, :conditions => {:link_category_id => @link_category.id})
+    @links = Link.find(:all, :conditions => {:link_category_id => @link_category.id, :public => true})
     add_breadcrumb @link_category.title
   end
 end

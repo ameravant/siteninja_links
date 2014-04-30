@@ -22,7 +22,7 @@ class LinksController < ApplicationController
   end
 
   def show
-    @link = Link.find(params[:id])
+    @link = Link.find(params[:id], :conditions => {:public => true})
     @images = @link.images
     @link_category = @link.link_category
     @menu = @link_category.menus.first if !@link_category.blank? and !@link_category.menus.empty?
