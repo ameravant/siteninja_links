@@ -1,4 +1,4 @@
 %h1= yield(:meta_title)
 =will_paginate @links if !@cms_config['site_settings']['links_pagination_position'] or @cms_config['site_settings']['links_pagination_position'] == "top" or @cms_config['site_settings']['links_pagination_position'] == "both"
 = render :partial => "links/link_for_list", :collection => @links
-=will_paginate @links if @cms_config['site_settings']['links_pagination_position'] == "both" or  !@cms_config['site_settings']['links_pagination_position'] == "bottom"
+=will_paginate @links if @cms_config['site_settings']['links_pagination_position'] == "both" or  @cms_config['site_settings']['links_pagination_position'] == "bottom"
