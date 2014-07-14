@@ -6,6 +6,7 @@ class Link < ActiveRecord::Base
   belongs_to :link_category
   acts_as_taggable
   named_scope :active, {:conditions => {:public => true}}
+  named_scope :featured, {:conditions => {:featured => true, :public => true}}
   has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :menus, :as => :navigatable, :dependent => :destroy

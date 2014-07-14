@@ -1,0 +1,31 @@
+- cslc = section.link_categories
+- categories = []
+- for category in cslc
+  - categories << category.id
+- count = section.count
+- if section.show_all_categories == true
+  - links = Link.featured[0..(count - 1)]
+- else
+  - #links = Link.featured.reject{|p| !(p.link_category_id {|pc| categories.include?(pc)})}
+  - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
+= debug categories
+%ul.link-list
+  - if section.section_format.blank?
+    - for link in links
+      %li.link
+        - unless link.images.blank? 
+          =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link, :class => "link-image"
+
+        %h3=link_to link.name, link
+  - elsif section.section_format == "extended"
+    - for link in links
+      %li.link
+        - unless link.images.blank? 
+          =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link, :class => "link-image"
+
+        %h3= link_to link.name, link
+        - if !link.blurb.blank?
+          .link-description
+            = link.blurb
+        .link-more-info
+          = link_to("More Info", link)

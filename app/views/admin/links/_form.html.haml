@@ -28,6 +28,9 @@
         = f.check_box :public
         = f.label :public, "Approve for Public Viewing"
         %br
+        = f.label :featured, "Feature"
+        = f.check_box :featured
+        %br
         = f.check_box :restrict_link
         = f.label :restrict_link, "Hide #{@cms_config['site_settings']['link_title']} Detail Page", :id => "link_restrict_link_label"
         %br
