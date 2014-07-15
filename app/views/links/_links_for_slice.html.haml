@@ -8,7 +8,7 @@
 - else
   - #links = Link.featured.reject{|p| !(p.link_category_id {|pc| categories.include?(pc)})}
   - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
-%ul.link-list
+%ul.link-list.list_of_links
   - if section.section_format.blank?
     - for link in links
       %li.link
