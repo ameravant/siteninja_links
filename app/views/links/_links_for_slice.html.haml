@@ -3,11 +3,12 @@
 - for category in cslc
   - categories << category.id
 - count = section.count
+- links = []
 - if section.show_all_categories == true
-  - links = Link.featured[0..(count - 1)]
+  - links = Link.featured[0..(count - 1)] if Link.featured
 - else
   - #links = Link.featured.reject{|p| !(p.link_category_id {|pc| categories.include?(pc)})}
-  - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
+  - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1] if Link.featured
 %ul.link-list.list_of_links
   - if section.section_format.blank?
     - for link in links
