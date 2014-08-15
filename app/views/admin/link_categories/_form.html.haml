@@ -1,9 +1,12 @@
 = f.error_messages
 
-%table{:cellspacing => "0"}
-  %tr
-    %td= f.label :title
-    %td= f.text_field :title
-
+.responsive-form
+	.main-fields
+		%h2.form-label= f.label :title
+		= f.text_field :title, :class => "big-input", :disabled => @disabled, :placeholder => "Generates the permalink."
+		.note.required *Required
+		%h2.form-label= f.label :description
+		.note Displayed on Link Category page, under Title.
+		= f.text_area :description, :class => "big-area"
 - fancy_submit admin_link_categories_path do
-  = f.submit "Save category"
+	= f.submit "Save category"

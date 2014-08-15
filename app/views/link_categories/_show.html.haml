@@ -1,2 +1,4 @@
 %h1= yield(:meta_title)
+- unless @link_category.description.blank?
+  = simple_format(@link_category.description)
 = render :partial => "links/link_for_list", :collection => @links
