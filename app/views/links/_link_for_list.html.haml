@@ -1,4 +1,4 @@
-.link_for_list
+%div{:class => "link_for_list #{"featured" if link_for_list.featured}"}
   - if link_for_list.restrict_link
     %h2=link_for_list.title
   - else
