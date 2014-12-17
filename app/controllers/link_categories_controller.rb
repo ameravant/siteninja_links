@@ -1,12 +1,14 @@
 class LinkCategoriesController < LinksController
   unloadable
   def index
-    
     if !params[:tag].blank?
       # Filter link by tag
       all_links = Link.active.find_tagged_with(params[:tag])
       add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
       add_breadcrumb params[:tag]
+    elsif params[:letter]
+      add_breadcrumb @cms_config['site_settings']['links_title']
+      all_links = Link.all(:conditions => ["title like ? and public = ?", "#{params[:letter]}%", true], :order => :title)
     else
       add_breadcrumb @cms_config['site_settings']['links_title']
       all_links = Link.find(:all, :conditions => {:public => true}, :order => :title)

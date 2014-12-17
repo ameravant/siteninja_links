@@ -15,7 +15,7 @@ class LinksController < ApplicationController
       all_links = Link.find(:all, :conditions => {:public => true}, :order => :title)
     end
     count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 20
-		@links = all_links.paginate(:page => params[:page], :per_page => count)
+    @links = all_links.paginate(:page => params[:page], :per_page => count)
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml { render :xml => all_links.to_xml }
