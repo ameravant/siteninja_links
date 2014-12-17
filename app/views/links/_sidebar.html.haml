@@ -2,7 +2,7 @@
 - unless @link_categories.empty?
   - content_for :side_column do
     %h2.top-headline Categories
-    %ul.list_of_links
+    %ul.list_of_links.categories
       - for category in @link_categories
         - unless category.links.empty?
           - if @link_category and @link_category == category
