@@ -1,3 +1,4 @@
+- @link_categories = LinkCategory.all(:conditions => {:link_category_id => nil})
 - unless @link_categories.empty?
   - content_for :side_column do
     %h2.top-headline Categories
@@ -5,9 +6,19 @@
       - for category in @link_categories
         - unless category.links.empty?
           - if @link_category and @link_category == category
-            %li.sidebar_link_active= h(category.title)
+            %li.sidebar_link_active
+              = h(category.title)
+              - if !category.link_categories.active.empty?
+                %ul.list_of_links.categories
+                  - for c in category.link_categories.active
+                    = render :partial => "link_category_for_list", :locals => {:category => c} unless c.links.empty?
           - else
-            %li= link_to(h(category.title), category)
+            %li
+              = link_to(h(category.title), category)
+              - if !category.link_categories.active.empty?
+                %ul.list_of_links.categories
+                  - for c in category.link_categories.active
+                    = render :partial => "link_category_for_list", :locals => {:category => c} unless c.links.empty?
 
           
           
