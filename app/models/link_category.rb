@@ -1,6 +1,9 @@
 class LinkCategory < ActiveRecord::Base
   has_permalink :title
 	has_many :links
+	has_and_belongs_to_many :links
+  has_many :link_categories
+  belongs_to :link_category
 	validates_presence_of :title
 	has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy

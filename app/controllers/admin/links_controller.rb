@@ -58,6 +58,8 @@ class Admin::LinksController < AdminController
 
   def create
     @link = Link.new(params[:link])
+    params[:link][:link_category_ids] ||= []
+    params[:link][:link_category_ids] << @link.link_category_id unless @link.link_category_id.blank?
     if @link.save
       flash[:notice] = "Link \"#{@link.title}\" created."
       redirect_to admin_links_path
@@ -74,7 +76,17 @@ class Admin::LinksController < AdminController
   end
 
   def update
+    params[:link][:link_category_ids] ||= []
+    params[:link][:link_category_ids] << @link.link_category_id unless @link.link_category_id.blank?
     if @link.update_attributes(params[:link])
+      #This is to removes link from categories if there are none selected
+      if !params[:link].has_key?("link_category_ids")
+        @link.link_categories = []
+        @link.save
+      end
+      ac_ids = @link.link_category_ids.uniq
+      @link.link_category_ids = []
+      @link.link_category_ids = ac_ids
       flash[:notice] = "Link \"#{@link.title}\" updated."
       redirect_to admin_links_path
     else

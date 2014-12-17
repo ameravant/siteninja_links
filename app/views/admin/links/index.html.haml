@@ -18,6 +18,9 @@
     h2.category { font-family: Tahoma, Arial, sans-serif; font-size: 1.2em; margin: 20px 0px 0px 10px}
     ==ul.top-options { margin: 0; padding: 0; list-style: none; }
     ==.pagination { margin: 5px 10px; }
+    ==.link-category { border: 1px solid rgba(12, 60, 84, .5); padding: 8px; margin: 4px 0 0; }
+    ==.link-category .category { font-size: 1.4em; }
+    ==.link-category .link-category { border-style: dotted; margin-right: -8px; border-right: 0; background: rgba(0,0,0,.05); }
 - if @paginate_link_index 
   .float-right
     %ul.top-options
@@ -47,7 +50,7 @@
       = spinner
       Reordering
       = @cms_config['site_settings']['links_title']
-      \...
+      ...
     %span.hmenu
       = icon "Plus", new_admin_link_path
       = link_to "Make a new #{@cms_config['site_settings']['link_title']}", new_admin_link_path
@@ -65,25 +68,28 @@
   %div.link-status-header
     Status
   = clear
-  - for link_category in @link_categories
-    %h2.category= link_to(link_category.title, [:edit, :admin, link_category])
-    %ul.sortable{:id => "tree_#{link_category.id}"}
-      - for link in link_category.links.sort_by(&:position)
-        %li{:id => "#{dom_id(link)}"}
-          .link-title
-            = image_tag("#{move_loc}", :class => "icon handle")
-            = link_to(link.title, [:edit, :admin, link])
-          .link-options
-            = feature_icon_select(link, link.title)
-            = icon "Write", [:edit, :admin, link]
-            = trash_icon(link, [:admin, link], "#{link.title}")
-          .link-images
-            = icon "Picture", [:admin, link, :images]
-            = link_to link.images_count, [:admin, link, :images]
-            = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
-          .link-status
-            = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
-          = clear
+  - for link_category in LinkCategory.all(:conditions => {:link_category_id => nil})
+    .link-category
+      .category= link_to(link_category.title, [:edit, :admin, link_category])
+      %ul.sortable{:id => "tree_#{link_category.id}"}
+        - for link in link_category.links.sort_by(&:position)
+          %li{:id => "#{dom_id(link)}"}
+            .link-title
+              = image_tag("#{move_loc}", :class => "icon handle")
+              = link_to(link.title, [:edit, :admin, link])
+            .link-options
+              = feature_icon_select(link, link.title)
+              = icon "Write", [:edit, :admin, link]
+              = trash_icon(link, [:admin, link], "#{link.title}")
+            .link-images
+              = icon "Picture", [:admin, link, :images]
+              = link_to link.images_count, [:admin, link, :images]
+              = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
+            .link-status
+              = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
+            = clear
+      - for lc in link_category.link_categories
+        = render :partial => "list_of_categorized_links", :locals => {:link_category => lc}
 
       = sortable_element("tree_#{link_category.id}", :url => reorder_admin_links_path + "?link_category_id=#{link_category.id}", :method => :put, :loading => "$('ajax_spinner').src='#{spinner_loc}'; $('reorder_status').show();", :success => "$('ajax_spinner').src='#{ok_loc}'", :failure => "$('ajax_spinner').src='#{exclamation_loc}'", :complete => visual_effect(:fade, "reorder_status", :delay => 1))
 

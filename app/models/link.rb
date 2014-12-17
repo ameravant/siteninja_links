@@ -1,9 +1,10 @@
 class Link < ActiveRecord::Base
+  belongs_to :link_category
+  has_and_belongs_to_many :link_categories
   has_permalink :title
   validates_presence_of :title
   validates_uniqueness_of :title
   validates_presence_of :link_category, :on => :create, :message => "You must have a link category selected"
-  belongs_to :link_category
   acts_as_taggable
   named_scope :active, {:conditions => {:public => true}}
   named_scope :featured, {:conditions => {:featured => true, :public => true}}

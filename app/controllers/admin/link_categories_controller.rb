@@ -3,6 +3,7 @@ class Admin::LinkCategoriesController < AdminController
   before_filter :authorization
   before_filter :find_link_category, :only => [ :edit, :update, :destroy ]
   before_filter :add_crumbs
+  before_filter :build_options, :only => [ :edit, :new, :create, :update ]
   add_breadcrumb "Categories", "admin_link_categories_path", :except => [ :index, :destroy ]
   add_breadcrumb "New Category", nil, :only => [ :new, :create ]
   
@@ -46,7 +47,28 @@ class Admin::LinkCategoriesController < AdminController
 
   private
 
+
+  def build_options(parent_id=nil)
+    children = LinkCategory.all(:conditions => {:link_category_id => parent_id})
+    @options_for_parent_id_level = @options_for_parent_id_level + 1
+    unless children.empty?
+      for child in children
+        nbsp_string = '&nbsp;' * (@options_for_parent_id_level * @options_for_parent_id_level) unless @options_for_parent_id_level == 1 
+        if params[:id]
+          @options_for_parent_id << ["#{nbsp_string}#{child.title}", child.id] unless child.id == ColumnSection.find(params[:id]).id
+        else
+          @options_for_parent_id << ["#{nbsp_string}#{child.title}", child.id] 
+        end
+        build_options(child.id)
+      end
+    end
+    @options_for_parent_id_level = @options_for_parent_id_level - 1
+  end
+
+
   def find_link_category
+    @options_for_parent_id = [['Top level category','']]
+    @options_for_parent_id_level = 0
     begin
       @link_category = LinkCategory.find(params[:id])
       

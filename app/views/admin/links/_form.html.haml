@@ -28,15 +28,29 @@
         = f.check_box :public
         = f.label :public, "Approve for Public Viewing"
         %br
-        = f.label :featured, "Feature"
         = f.check_box :featured
+        = f.label :featured, "Feature"
         %br
         = f.check_box :restrict_link
         = f.label :restrict_link, "Hide #{@cms_config['site_settings']['link_title']} Detail Page", :id => "link_restrict_link_label"
         %br
-        = f.label :link_category_id, "Category"
-        %br
-        = f.select :link_category_id, LinkCategory.find(:all).collect {|p| [p.title, p.id]}
+        %ul
+          %li
+            = f.label :link_category_id, "Primary Category"
+            %br
+            = f.select :link_category_id, LinkCategory.all.sort_by(&:title).collect {|ac| [ac.title, ac.id]}, {:include_blank => "Select a main category"}, :selected => current_user.id
+          %li
+            - unless current_user.is_contributor_only?
+              %div{:class => (!@link.new_record? and @link.link_categories.active.count == 0 ? "bold red" : nil)}
+                = f.label :link_category_ids, link_to("Secondary Categories", "javascript:void(0)", :id => "display-secondary-categories")
+                = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "Secondary Categories are categories an link is associated with that are not the primary category. The link will use settings (such as side column) from the main category, while still appearing on the secondary categories' lists of links."}
+              #secondary-categories
+                %img{:src =>"#{css_icon("Cancel","","16x16","red")}", :title =>"close", :alt=> "close box icon", :class => "close-icon", :onclick => "jQuery('#secondary-categories').slideUp()"}
+                - for link_category in @link_categories
+                  %span.category_checkbox
+                    = check_box_tag "link[link_category_ids][]", link_category.id, @link.link_categories.include?(link_category), :id => dom_id(link_category)
+                    = label_tag dom_id(link_category), "#{link_category.name}"
+        = clear
         %br
         = f.label :description, "Short Description"
         = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "The Short Description is used for the Meta Description and the feature box description of the link."}
@@ -71,8 +85,36 @@
     - if @link.restrict_link
       == #body-wrapper { display: none; }
       == #link_body_ifr { height: 700px !important; }
+    ==#secondary-categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 200px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); }
   %script{:type => "text/javascript"}
     jQuery(document).ready(function() {
+    jQuery("#secondary-categories").hide();
+    jQuery("#display-secondary-categories").click(function()
+    {
+    jQuery("#secondary-categories").slideToggle(500);
+    });
+    jQuery(".fancy-iframe").fancybox({ 
+    'zoomSpeedIn': 300,
+    'zoomSpeedOut': 300,
+    'overlayShow': true,
+    'hideOnContentClick': 'true',
+    'easingOut': 'easeOutQuad',
+    'easingIn': 'easeInQuad',
+    'type': 'iframe',
+    'width': 910,
+    'autoScale': true,
+    'height':"90%"
+    }); 
+    jQuery(".fancy-inline").fancybox({ 
+    'zoomSpeedIn': 300,
+    'zoomSpeedOut': 300,
+    'overlayShow': true,
+    'hideOnContentClick': false,
+    'hideOnOverlayClick': false,
+    'type': 'inline',
+    'showCloseButton' : false,
+    'autoScale': true
+    });
     jQuery("#link_restrict_link").click(function()
     {
     jQuery("#body-wrapper").toggle();
@@ -80,5 +122,4 @@
     });
     function addtext(text) {
     tinymce.get("link_body").insertContent(text);
-    -#tinyMCE.execInstanceCommand("link_body","mceInsertContent",false,text);
     }

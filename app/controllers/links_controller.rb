@@ -4,6 +4,7 @@ class LinksController < ApplicationController
   add_breadcrumb "Home", "root_path"
 
   def index
+    @link_categories = LinkCategory.all(:conditions => {:link_category_id => nil})
     if !params[:tag].blank?
       # Filter link by tag
       all_links = Link.active.find_tagged_with(params[:tag])

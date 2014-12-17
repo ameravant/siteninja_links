@@ -1,12 +1,24 @@
 = f.error_messages
 
 .responsive-form
-	.main-fields
-		%h2.form-label= f.label :title
-		= f.text_field :title, :class => "big-input", :disabled => @disabled, :placeholder => "Generates the permalink."
-		.note.required *Required
-		%h2.form-label= f.label :description
-		.note Displayed on Link Category page, under Title.
-		= f.text_area :description, :class => "big-area"
+  .main-fields
+    %h2.form-label= f.label :title
+    = f.text_field :title, :class => "big-input", :disabled => @disabled, :placeholder => "Generates the permalink."
+    .note.required *Required
+    %h2.form-label= f.label :description
+    .note Displayed on Link Category page, under Title.
+    = f.text_area :description, :class => "big-area"
+  #main-details.details.options
+    #options
+      %ul
+        %li
+          = f.label :link_category_id, "Category Placement"
+          %select{:name => "link_category[link_category_id]", :id => "link_category_link_category_id", :class => "select"}
+            - for o in @options_for_parent_id
+              - unless @link_category.id.blank?
+                %option{:value => o[1] , :selected => (@link_category.link_category_id and o[1] == @link_category.link_category_id ? "selected" : nil)}= o[0]
+              - else
+                %option{:value => o[1] , :selected => nil}= o[0]
+
 - fancy_submit admin_link_categories_path do
-	= f.submit "Save category"
+  = f.submit "Save category"
