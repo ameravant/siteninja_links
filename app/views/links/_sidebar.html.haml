@@ -14,7 +14,10 @@
                     = render :partial => "link_category_for_list", :locals => {:category => c} unless c.links.empty?
           - else
             %li
-              = link_to(h(category.title), category)
+              - if category.links.empty?
+                = h(category.title)
+              - else
+                = link_to(h(category.title), category)
               - if !category.link_categories.active.empty?
                 %ul.list_of_links.categories
                   - for c in category.link_categories.active
