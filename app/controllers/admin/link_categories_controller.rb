@@ -9,7 +9,7 @@ class Admin::LinkCategoriesController < AdminController
   add_breadcrumb "New Category", nil, :only => [ :new, :create ]
   
   def index
-    @link_categories = LinkCategory.all
+    @link_categories = LinkCategory.all(:conditions => {:link_category_id => nil})
     add_breadcrumb "Categories", nil
   end
 
@@ -44,6 +44,15 @@ class Admin::LinkCategoriesController < AdminController
   def destroy
     @link_category.destroy
     respond_to :js
+  end
+
+  def receive_drop
+    @link_categories = LinkCategory.all(:conditions => {:link_category_id => nil})
+    lc_id = params[:id].to_s.gsub("link_category_", "").to_i
+    lc = LinkCategory.find(lc_id)
+    lc.update_attributes(:link_category_id => params[:parent_id]) unless params[:parent_id].to_i == lc.id.to_i
+    render :action => :index, :layout => false
+    #redirect_to admin_link_categories_path
   end
 
   private

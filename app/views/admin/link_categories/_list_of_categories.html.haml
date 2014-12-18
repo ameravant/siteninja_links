@@ -1,0 +1,22 @@
+- children = LinkCategory.all(:conditions => {:link_category_id => parent_id})
+- ul_id = "menu_list_#{parent_id || '0'}"
+- unless children.empty?
+  %ul.lc{:id => "#{ul_id}"}
+    - for child in children
+      %li.menu-item{:id => "#{dom_id(child)}"}
+        .menu-item-inner
+          .lc-title= link_to h(child.title), edit_admin_link_category_path(child)
+          .lc-options
+            - if child.menus_count > 0
+              = navigation_icon(child, child.title, "inline")
+            - else
+              = activate_navigation_icon(child, [:new, :admin, child, :menu], child.title, "inline")
+            = icon "Write", edit_admin_link_category_path(child)
+            = trash_icon(child, admin_link_category_path(child), "the #{child.title} category") unless child.links.size > 0
+          .lc-resources= number_with_delimiter(child.links.count)
+          = clear
+          .droppable{:id => "droppable_#{dom_id(child)}"}
+            %span== Drop menu into "#{child.title}."
+        = render :partial => "list_of_categories", :locals => {:parent_id => child.id}
+        = draggable_element(dom_id(child), :constraint => "'vertical'")
+        = drop_receiving_element("droppable_#{dom_id(child)}", :hoverclass => "draghover", :url => receive_drop_admin_link_categories_path + "?parent_id=#{child.id}", :method => :get, :loading => "$('ajax_spinner').src='#{spinner_loc}'; $('reorder_status').show();", :success => "$('ajax_spinner').src='#{ok_loc}'", :failure => "$('ajax_spinner').src='#{exclamation_loc}'", :update => "link-category-index")
