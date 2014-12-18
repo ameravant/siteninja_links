@@ -55,6 +55,10 @@ class Admin::LinkCategoriesController < AdminController
     #redirect_to admin_link_categories_path
   end
 
+  def ajax_category_list
+    render :layout => false
+  end
+
   private
 
   def start_build_options
