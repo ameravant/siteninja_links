@@ -1,5 +1,5 @@
 - children = LinkCategory.all(:conditions => {:link_category_id => parent_id})
-- ul_id = "menu_list_#{parent_id || '0'}"
+- ul_id = "menu_list_#{parent_id}"
 - unless children.empty?
   %ul.lc{:id => "#{ul_id}"}
     - for child in children
@@ -17,11 +17,12 @@
           = clear
           .droppable{:id => "droppable_#{dom_id(child)}"}
             %span== Drop menu into "#{child.title}."
-        %div{:id => "ajax-category-#{ul_id}"}
-        %script{:type => "text/javascript"}
-          jQuery(function() {
-          ==jQuery('#ajax-category-#{ul_id}').load('/admin/link_categories/ajax_category_list?parent_id=#{child.id}');
-          });
+        - if child.link_categories
+          %div{:id => "ajax-category-#{ul_id}"}
+          %script{:type => "text/javascript"}
+            jQuery(function() {
+            ==jQuery('#ajax-category-#{ul_id}').load('/admin/link_categories/ajax_category_list?parent_id=#{child.id}');
+            });
         = #render :partial => "list_of_categories", :locals => {:parent_id => child.id}
         = draggable_element(dom_id(child), :constraint => "'vertical'")
         = drop_receiving_element("droppable_#{dom_id(child)}", :hoverclass => "draghover", :url => receive_drop_admin_link_categories_path + "?parent_id=#{child.id}", :method => :get, :loading => "$('ajax_spinner').src='#{spinner_loc}'; $('reorder_status').show();", :success => "$('ajax_spinner').src='#{ok_loc}'", :failure => "$('ajax_spinner').src='#{exclamation_loc}'", :update => "link-category-index")
