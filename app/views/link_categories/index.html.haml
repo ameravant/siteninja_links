@@ -1,6 +1,8 @@
 - content_for :meta_title do
   - if !params[:tag].blank?
     == #{@cms_config['site_settings']['links_title']} by tag: #{h params[:tag]}
+  - elsif !params[:letter].blank?
+  	=="#{params[:letter].capitalize}" #{@cms_config['site_settings']['links_title']}
   - else
     =@cms_config['site_settings']['links_title']
 
