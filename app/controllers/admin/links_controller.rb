@@ -59,7 +59,7 @@ class Admin::LinksController < AdminController
   def create
     @link = Link.new(params[:link])
     params[:link][:link_category_ids] ||= []
-    params[:link][:link_category_ids] << @link.link_category_id unless @link.link_category_id.blank?
+    @link.link_categories << LinkCategory.find(params[:link][:link_category_id]) unless params[:link][:link_category_id].blank? 
     if @link.save
       flash[:notice] = "Link \"#{@link.title}\" created."
       redirect_to admin_links_path
