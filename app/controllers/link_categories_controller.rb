@@ -1,6 +1,7 @@
 class LinkCategoriesController < LinksController
   unloadable
   def index
+    expires_in 60.minutes, :public => true
     if !params[:tag].blank?
       # Filter link by tag
       all_links = Link.active.find_tagged_with(params[:tag])
@@ -26,6 +27,7 @@ class LinkCategoriesController < LinksController
   end
 
   def show
+  expires_in 60.minutes, :public => true
   add_breadcrumb @cms_config['site_settings']['links_title'], 'link_categories_path'
     @page = Page.find_by_permalink("links")
     @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))

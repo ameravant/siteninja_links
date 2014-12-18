@@ -24,6 +24,7 @@ class LinksController < ApplicationController
   end
 
   def show
+    expires_in 60.minutes, :public => true
     @link = Link.find(params[:id], :conditions => {:public => true})
     @images = @link.images
     @link_category = @link.link_category
