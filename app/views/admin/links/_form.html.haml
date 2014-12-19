@@ -86,40 +86,41 @@
       == #body-wrapper { display: none; }
       == #link_body_ifr { height: 700px !important; }
     ==#secondary-categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 200px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); }
-  %script{:type => "text/javascript"}
-    jQuery(document).ready(function() {
-    jQuery("#secondary-categories").hide();
-    jQuery("#display-secondary-categories").click(function()
-    {
-    jQuery("#secondary-categories").slideToggle(500);
-    });
-    jQuery(".fancy-iframe").fancybox({ 
-    'zoomSpeedIn': 300,
-    'zoomSpeedOut': 300,
-    'overlayShow': true,
-    'hideOnContentClick': 'true',
-    'easingOut': 'easeOutQuad',
-    'easingIn': 'easeInQuad',
-    'type': 'iframe',
-    'width': 910,
-    'autoScale': true,
-    'height':"90%"
-    }); 
-    jQuery(".fancy-inline").fancybox({ 
-    'zoomSpeedIn': 300,
-    'zoomSpeedOut': 300,
-    'overlayShow': true,
-    'hideOnContentClick': false,
-    'hideOnOverlayClick': false,
-    'type': 'inline',
-    'showCloseButton' : false,
-    'autoScale': true
-    });
-    jQuery("#link_restrict_link").click(function()
-    {
-    jQuery("#body-wrapper").toggle();
-    });
-    });
-    function addtext(text) {
-    tinymce.get("link_body").insertContent(text);
-    }
+  - content_for :footer do 
+    %script{:type => "text/javascript"}
+      jQuery(document).ready(function() {
+      jQuery("#secondary-categories").hide();
+      jQuery("#display-secondary-categories").click(function()
+      {
+      jQuery("#secondary-categories").slideToggle(500);
+      });
+      jQuery(".fancy-iframe").fancybox({ 
+      'zoomSpeedIn': 300,
+      'zoomSpeedOut': 300,
+      'overlayShow': true,
+      'hideOnContentClick': 'true',
+      'easingOut': 'easeOutQuad',
+      'easingIn': 'easeInQuad',
+      'type': 'iframe',
+      'width': 910,
+      'autoScale': true,
+      'height':"90%"
+      }); 
+      jQuery(".fancy-inline").fancybox({ 
+      'zoomSpeedIn': 300,
+      'zoomSpeedOut': 300,
+      'overlayShow': true,
+      'hideOnContentClick': false,
+      'hideOnOverlayClick': false,
+      'type': 'inline',
+      'showCloseButton' : false,
+      'autoScale': true
+      });
+      jQuery("#link_restrict_link").click(function()
+      {
+      jQuery("#body-wrapper").toggle();
+      });
+      });
+      function addtext(text) {
+      tinymce.get("link_body").insertContent(text);
+      }
