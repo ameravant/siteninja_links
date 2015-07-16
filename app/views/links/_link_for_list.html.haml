@@ -15,7 +15,7 @@
     = simple_format(link_for_list.blurb)
   .visit-site
     - unless link_for_list.url.blank?
-      = link_to("Visit site", link_for_list.url)
+      = link_to("Visit site", link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
   = clear
   
 - content_for :head do
