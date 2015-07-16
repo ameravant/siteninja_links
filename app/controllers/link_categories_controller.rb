@@ -9,10 +9,10 @@ class LinkCategoriesController < LinksController
       add_breadcrumb params[:tag]
     elsif params[:letter]
       add_breadcrumb @cms_config['site_settings']['links_title']
-      all_links = Link.all(:conditions => ["title like ? and public = ?", "#{params[:letter]}%", true], :order => :title)
+      all_links = Link.all(:conditions => ["title like ? and public = ?", "#{params[:letter]}%", true], :order => @cms_config['site_settings']['links_alphabetical'] ? :title : :position)
     else
       add_breadcrumb @cms_config['site_settings']['links_title']
-      all_links = Link.find(:all, :conditions => {:public => true}, :order => :title)
+      all_links = Link.find(:all, :conditions => {:public => true}, :order => @cms_config['site_settings']['links_alphabetical'] ? :title : :position)
     end
     count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 8
 		@links = all_links.paginate(:page => params[:page], :per_page => count)
