@@ -9,7 +9,10 @@
       - if link_for_list.restrict_link
         = image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title)
       - else
-        = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), [link_for_list.link_category, link_for_list], :title => h(image.image_title))
+        - if @cms_config['site_settings']['link_images_to_site']
+          = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
+        - else
+          = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), [link_for_list.link_category, link_for_list], :title => h(image.image_title))
       = clear
   - unless link_for_list.blurb.blank?
     = simple_format(link_for_list.blurb)
