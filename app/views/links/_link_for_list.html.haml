@@ -1,6 +1,6 @@
 %div{:class => "link_for_list #{"featured" if link_for_list.featured}"}
   - if link_for_list.restrict_link
-    %h2=link_for_list.title
+    %h2=link_to(link_for_list.title, link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
   - else
     %h2= link_to(link_for_list.title, [link_for_list.link_category, link_for_list])
   - unless link_for_list.images.empty?
