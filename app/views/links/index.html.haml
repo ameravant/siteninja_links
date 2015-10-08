@@ -3,6 +3,7 @@
     == #{@cms_config['site_settings']['link_title'].pluralize} by tag: #{h params[:tag]}
   - else
     =@cms_config['site_settings']['links_title']
+  = " - Page #{params[:page]}" if params[:page]
 - if !@cms_config['site_settings']['enable_responsive_layouts']
   %h1= yield(:meta_title)
   - if @cms_config['site_settings']['alphabetize_links']
