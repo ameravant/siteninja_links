@@ -5,6 +5,10 @@
     =="#{params[:letter].capitalize}" #{@cms_config['site_settings']['links_title']}
   - else
     =@cms_config['site_settings']['links_title']
+  = " - Page #{params[:page]}" if params[:page]
+- content_for :meta_description do
+  = "A listing of category links"
+  = " - Page #{params[:page]}" if params[:page]
 
 = render :partial => "shared/slice", :locals => {:column_section_id => nil, :controller => "link_categories", :action => "index"}, :collection => @main_column_sections
 
