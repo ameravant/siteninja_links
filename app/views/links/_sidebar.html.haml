@@ -8,20 +8,20 @@
           - if @link_category and @link_category == category
             %li.sidebar_link_active
               = h(category.title)
-              - if !category.link_categories.active.empty?
-                %ul.list_of_links.categories
-                  - for c in category.link_categories.active
-                    = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
+              / - if !category.link_categories.active.empty?
+              /   %ul.list_of_links.categories
+              /     - for c in category.link_categories.active
+              /       = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
           - else
             %li
               - if category.links.empty?
                 = h(category.title)
               - else
                 = link_to(h(category.title), category)
-              - if !category.link_categories.active.empty?
-                %ul.list_of_links.categories
-                  - for c in category.link_categories.active
-                    = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
+              / - if !category.link_categories.active.empty?
+              /   %ul.list_of_links.categories
+              /     - for c in category.link_categories.active
+              /       = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
 
           
           
