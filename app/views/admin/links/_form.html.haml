@@ -41,7 +41,7 @@
             = f.select :link_category_id, LinkCategory.all.sort_by(&:title).collect {|ac| [ac.title, ac.id]}, {:include_blank => "Select a main category"}, :selected => current_user.id
           %li
             - unless current_user.is_contributor_only?
-              %div{:class => (!@link.new_record? and @link.link_categories.(:conditions => {:active => true}).count == 0 ? "bold red" : nil)}
+              %div{:class => (!@link.new_record? and @link.link_categories(:conditions => {:active => true}).count == 0 ? "bold red" : nil)}
                 = f.label :link_category_ids, link_to("Secondary Categories", "javascript:void(0)", :id => "display-secondary-categories")
                 = render :partial => 'admin/shared/help_tip', :locals =>{:tip_headline => "", :tip_text => "Secondary Categories are categories an link is associated with that are not the primary category. The link will use settings (such as side column) from the main category, while still appearing on the secondary categories' lists of links."}
               #secondary-categories
