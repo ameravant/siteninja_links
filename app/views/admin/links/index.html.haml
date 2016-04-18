@@ -6,12 +6,14 @@
     div.link-title-header { float: left; width: 60px; font-weight: bold; color: #666; margin: 0 0 0 10px; }
     div.link-options-header { float: right; width: 60px; text-align: left; font-weight: bold; color: #666; }
     div.link-images-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
+    div.link-files-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
     div.link-testimonials-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
     div.link-status-header { float: right; width: 150px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
     div.link-images { float: left; margin-right: 20px; }
     div.link-title { float: left; margin-right: 20px; }
     div.link-options { text-align: right; float: right; width: 60px; }
     div.link-images { float: right; margin-right: 20px; width: 100px; text-align: left; }
+    div.link-files { float: right; margin-right: 20px; width: 100px; text-align: left; }
     div.link-testimonials { float: right; margin-right: 20px; width: 100px; text-align: left; }
     div.link-status { float: right; margin-right: 20px; width: 150px; text-align: left; }
     ul.sortable li { border-bottom: #ccc 1px solid; }
@@ -64,6 +66,8 @@
     Options
   %div.link-images-header
     Images
+  %div.link-files-header
+    Files
   %div.link-status-header
     Status
   = clear
@@ -84,6 +88,13 @@
               = icon "Picture", [:admin, link, :images]
               = link_to link.images_count, [:admin, link, :images]
               = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
+            .link-files
+              - if link.assets_count < 1
+                = icon "Document", [:new, :admin, link, :asset]
+                = link_to link.assets_count, [:new, :admin, link, :asset]
+              - else
+                = icon "Document", [:admin, link, :assets]
+                = link_to link.assets_count, [:admin, link, :assets]
             .link-status
               = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
             = clear

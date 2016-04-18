@@ -9,6 +9,7 @@ class Link < ActiveRecord::Base
   named_scope :active, {:conditions => {:public => true}}
   named_scope :featured, {:conditions => {:featured => true, :public => true}}
   has_many :images, :as => :viewable, :dependent => :destroy
+  has_many :assets, :as => :attachable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :menus, :as => :navigatable, :dependent => :destroy
   default_scope :order => :position

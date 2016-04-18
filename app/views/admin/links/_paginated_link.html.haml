@@ -9,6 +9,13 @@
     = icon "Picture", [:admin, paginated_link, :images]
     = link_to paginated_link.images_count, [:admin, paginated_link, :images]
     = image_tag(paginated_link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless paginated_link.images.empty?
+  .link-files
+    - if paginated_link.assets_count < 1
+      = icon "Document", [:new, :admin, paginated_link, :asset]
+      = link_to paginated_link.assets_count, [:new, :admin, paginated_link, :asset]
+    - else
+      = icon "Document", [:admin, paginated_link, :assets]
+      = link_to paginated_link.assets_count, [:admin, paginated_link, :assets]
   .link-status
     = paginated_link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
   = clear

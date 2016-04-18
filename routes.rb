@@ -8,7 +8,8 @@ namespace :admin do |admin|
     link_category.resources :menus
     link_category.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put }
   end
-  admin.resources :links, :has_many => :features, :collection => { :reorder => :put } do |link|
+  admin.resources :links, :has_many => [:features, :assets], :collection => { :reorder => :put } do |link|
     link.resources :images, :member => { :reorder => :put }, :collection => { :reorder => :put, :add_multiple => :get }
   end
 end
+
