@@ -14,6 +14,13 @@
           = icon "Picture", [:admin, link, :images]
           = link_to link.images_count, [:admin, link, :images]
           = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
+        .link-files
+          - if link.assets_count < 1
+            = icon "Document", [:new, :admin, link, :asset]
+            = link_to link.assets_count, [:new, :admin, link, :asset]
+          - else
+            = icon "Document", [:admin, link, :assets]
+            = link_to link.assets_count, [:admin, link, :assets]
         .link-status
           = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
         = clear
