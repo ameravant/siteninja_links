@@ -9,18 +9,20 @@
   - else
     - #links = Link.featured.reject{|p| !(p.link_category_id {|pc| categories.include?(pc)})}
     - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
-  %ul.link-list.list_of_links
-    - if section.section_format.blank?
+
+  - if section.section_format.blank?
+    %ul.link-list.list_of_links
       - for link in links
         %li.link
           - unless link.images.blank? 
             =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), [link.link_category, link], :class => "link-image"
 
           %h3=link_to link.name, [link.link_category, link]
-    - elsif section.section_format == "custom"
-      - template = Liquid::Template.parse(section.section_layout)
-      = template.render( 'link_list' => links, 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links, :locals => { :section => section}))
-    - elsif section.section_format == "extended"
+  - elsif section.section_format == "custom"
+    - template = Liquid::Template.parse(section.section_layout)
+    = template.render( 'link_list' => links, 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links, :locals => { :section => section}))
+  - elsif section.section_format == "extended"
+    %ul.link-list.list_of_links
       - for link in links
         %li.link
           - unless link.images.blank? 
