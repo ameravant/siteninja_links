@@ -7,4 +7,4 @@
   - thumbnail = link_for_custom_slice.images.first.thumbnail
   - large_image = link_for_custom_slice.images.first.image(:large)
   - medium_image = link_for_custom_slice.images.first.image(:medium)
-= template.render( 'link' => link_for_custom_slice, 'title' => link_for_custom_slice.title, 'blurb' => (link_for_custom_slice.blurb), 'body' => ninja_parse(link_for_custom_slice.body), 'attachments' => (render :partial => "links/link_attachments", :locals => { :link => link_for_custom_slice }), 'link_path' => link_path(self), 'thumbnail' => thumbnail, 'large_image' => large_image, 'medium_image' => medium_image )
+= template.render( 'link' => link_for_custom_slice, 'title' => link_for_custom_slice.title, 'blurb' => (link_for_custom_slice.blurb), 'body' => ninja_parse(link_for_custom_slice.body), 'attachments' => (render :partial => "links/link_attachments", :locals => { :link => link_for_custom_slice }), 'link_path' => link_category_link_path(link_for_custom_slice.link_category, link_for_custom_slice), 'thumbnail' => thumbnail, 'large_image' => large_image, 'medium_image' => medium_image )
