@@ -37,4 +37,9 @@ class Link < ActiveRecord::Base
   def name
     self.title
   end
+  if RAILS_ENV == "production"
+    def to_liquid
+      {'title' => self.title, 'blurb' => self.blurb, 'body' => self.body}
+    end
+  end
 end
