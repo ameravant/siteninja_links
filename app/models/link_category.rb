@@ -8,6 +8,8 @@ class LinkCategory < ActiveRecord::Base
 	has_many :images, :as => :viewable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :menus, :as => :navigatable, :dependent => :destroy
+  belongs_to :page_layout, :class_name => "Column", :foreign_key => :main_column_id
+  belongs_to :link_layout, :class_name => "Column", :foreign_key => :link_main_column_id
   has_many :column_section_link_categories
   has_many :column_sections, :through => :column_section_link_categories
   default_scope :order => "title"

@@ -30,10 +30,21 @@ class LinkCategoriesController < LinksController
   #expires_in 60.minutes, :public => true
   add_breadcrumb @cms_config['site_settings']['links_title'], 'link_categories_path'
     @page = Page.find_by_permalink("links")
-    @main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
-    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
+    #@main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
     @link_category = LinkCategory.find(params[:id])
     @link_category.menus.empty? ? @menu = @page.menus.first : @menu = @link_category.menus.first
+    if !params[:page_layout].blank?
+      @main_column = Column.find(params[:page_layout])
+    elsif @link_category.page_layout.blank?
+      if @page.page_layout.blank?
+        @main_column = Column.first(:conditions => {:title => "Default", :column_location => "main_column"})
+      else
+        @main_column = Column.find(@page.main_column_id)
+      end
+    else
+      @main_column = Column.find(@link_category.main_column_id)
+    end
+    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
     @links = @link_category.links.active
     add_breadcrumb @link_category.title
   end

@@ -10,16 +10,26 @@
     = f.text_area :description, :class => "big-area"
   #main-details.details.options
     #options
-      %ul
-        %li
-          - if @options_for_parent_id
-            = f.label :link_category_id, "Category Placement"
+      %dl
+        - if @options_for_parent_id
+          %dt.form-label= f.label :link_category_id, "Category Placement"
+          %dd.form-option
             %select{:name => "link_category[link_category_id]", :id => "link_category_link_category_id", :class => "select"}
               - for o in @options_for_parent_id
                 - unless @link_category.id.blank?
                   %option{:value => o[1] , :selected => (@link_category.link_category_id and o[1] == @link_category.link_category_id ? "selected" : nil)}= o[0]
                 - else
                   %option{:value => o[1] , :selected => nil}= o[0]
+      %dl
+        %dt.form-label
+          = f.label :main_column_id, "Category Layout"
+        %dd.form-option
+          = collection_select(:link_category, :main_column_id, @layouts, :id, :title, {:include_blank => "Default Link Page Layout"}, :class => "select")
+      %dl
+        %dt.form-label
+          = f.label :link_main_column_id, "Link Layout"
+        %dd.form-option
+          = collection_select(:link_category, :link_main_column_id, @layouts, :id, :title, {:include_blank => "Same as Category"}, :class => "select")
 
 - fancy_submit admin_link_categories_path do
   = f.submit "Save category"

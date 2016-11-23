@@ -15,6 +15,7 @@ class Admin::LinkCategoriesController < AdminController
 
   def new
     @link_category = LinkCategory.new
+    @layouts = Column.all(:conditions => {:column_location => "main_column"})
   end
 
   def create
@@ -29,6 +30,7 @@ class Admin::LinkCategoriesController < AdminController
 
   def edit
     add_breadcrumb @link_category.title
+    @layouts = Column.all(:conditions => {:column_location => "main_column"})
   end
 
   def update
