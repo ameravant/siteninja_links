@@ -1,7 +1,7 @@
 - unless category.links.empty? and category.link_categories.empty?
   - if @link_category and @link_category == category
     %li.sidebar_link_active
-      = h(category.title)
+      = link_to(h(category.title), category)
       - if !category.link_categories.active.empty?
         %ul.list_of_links.categories
           - for c in category.link_categories.active
