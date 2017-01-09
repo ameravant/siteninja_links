@@ -4,7 +4,7 @@
   - elsif !params[:letter].blank?
     =="#{params[:letter].capitalize}" #{@cms_config['site_settings']['links_title']}
   - else
-    =@cms_config['site_settings']['links_title']
+    = @cms_config['site_settings']['links_title']
   = " - Page #{params[:page]}" if params[:page]
 - content_for :meta_description do
   = "A listing of category links"
