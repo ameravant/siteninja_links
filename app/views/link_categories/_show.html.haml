@@ -5,4 +5,4 @@
   = render :partial => "links/link_for_list", :collection => @links
 - else
   - template = Liquid::Template.parse(@tmplate.template_html.links_index)
-  = template.render( 'link_list' => @links, 'title' => @link_category.title, 'link_loop' => (render :partial => 'links/link_for_liquid_layout', :collection => @links, :locals => { :link_loop => @tmplate.template_html.links_index_loop}))
+  = template.render( 'link_list' => @links, 'title' => @link_category.title, 'description' => simple_format(@link_category.description), 'link_loop' => (render :partial => 'links/link_for_liquid_layout', :collection => @links, :locals => { :link_loop => @tmplate.template_html.links_index_loop}))

@@ -12,6 +12,6 @@
   = render :partial => "links/link_for_list", :collection => @links
 - else
   - template = Liquid::Template.parse(@tmplate.template_html.links_index)
-  = template.render( 'link_list' => @links, 'title' => @page.title, 'link_loop' => (render :partial => 'links/link_for_liquid_layout', :collection => @links, :locals => { :link_loop => @tmplate.template_html.links_index_loop}))
+  = template.render( 'link_list' => @links, 'title' => @page.title, 'description' => @page.body, 'link_loop' => (render :partial => 'links/link_for_liquid_layout', :collection => @links, :locals => { :link_loop => @tmplate.template_html.links_index_loop}))
 = will_paginate @links if @cms_config['site_settings']['links_pagination_position'] == "both" or  @cms_config['site_settings']['links_pagination_position'] == "bottom"
 
