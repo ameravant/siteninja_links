@@ -15,6 +15,10 @@
             = icon "Write", edit_admin_link_category_path(child)
             = trash_icon(child, admin_link_category_path(child), "the #{child.title} category") unless child.links.size > 0
           .lc-resources= number_with_delimiter(child.links.count)
+          .lc-images
+            = icon "Picture", [:admin, child, :images]
+            = link_to child.images_count, [:admin, child, :images]
+            = image_tag(child.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless child.images.empty?
           = clear
           .droppable{:id => "droppable_#{dom_id(child)}"}
             %span== Drop menu into "#{child.title}."
