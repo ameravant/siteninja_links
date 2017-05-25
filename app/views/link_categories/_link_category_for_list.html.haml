@@ -5,7 +5,7 @@
       - if !category.link_categories.active.empty?
         %ul.list_of_links.categories
           - for c in category.link_categories.active
-            = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
+            = render :partial => "link_categories/link_category_for_list", :locals => {:category => c}# unless c.links.empty?
       
   - else
     %li
@@ -13,4 +13,4 @@
       - if !category.link_categories.active.empty?
         %ul.list_of_links.categories
           - for c in category.link_categories.active
-            = render :partial => "link_categories/link_category_for_list", :locals => {:category => c} unless c.links.empty?
+            = render :partial => "link_categories/link_category_for_list", :locals => {:category => c}# unless c.links.empty?
