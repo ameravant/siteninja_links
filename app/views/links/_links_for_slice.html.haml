@@ -25,7 +25,7 @@
     = template.render( 'link_list' => links, 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links, :locals => { :section => section}))
   - elsif section.section_format == "extended"
     %ul.link-list.list_of_links
-      - for link in links
+      - for link in links.sort_by(&:position)
         %li.link
           - unless link.images.blank? 
             =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), [link.link_category, link], :class => "link-image"
