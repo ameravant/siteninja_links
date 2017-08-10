@@ -52,7 +52,6 @@ class Admin::LinksController < AdminController
     if params[:duplicate_id]
       @link = Link.find(params[:duplicate_id]).clone
       @link.title = "#{@link.title} (Copy)"
-      @link.meta_title = "#{@link.meta_title} (Copy)"
       @link.permalink = ""
     end
   end
