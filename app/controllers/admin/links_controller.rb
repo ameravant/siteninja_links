@@ -49,6 +49,12 @@ class Admin::LinksController < AdminController
     add_breadcrumb @cms_config['site_settings']['links_title'], admin_links_path
     add_breadcrumb "New"
     @link = Link.new
+    if params[:duplicate_id]
+      @link = Link.find(params[:duplicate_id]).clone
+      @link.title = "#{@link.title} (Copy)"
+      @link.meta_title = "#{@link.meta_title} (Copy)"
+      @link.permalink = ""
+    end
   end
 
   def edit
