@@ -3,6 +3,7 @@
     = link_to(paginated_link.title, [:edit, :admin, paginated_link])
   .link-options
     = feature_icon_select(paginated_link, paginated_link.title)
+    = link_to("", new_admin_link_path(:duplicate_id => paginated_link.id), :class => "icon fa fa-files-o", :title => "Copy")
     = icon "Write", [:edit, :admin, paginated_link]
     = trash_icon(paginated_link, [:admin, paginated_link], "#{paginated_link.title}")
   .link-images
