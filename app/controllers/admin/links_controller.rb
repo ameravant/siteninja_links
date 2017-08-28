@@ -82,7 +82,7 @@ class Admin::LinksController < AdminController
 
   def update
     params[:link][:link_category_ids] ||= []
-    params[:link][:link_category_ids] << @link.link_category_id unless @link.link_category_id.blank?
+    params[:link][:link_category_ids] << params[:link][:link_category_id] unless params[:link][:link_category_id].blank?
     if @link.update_attributes(params[:link])
       #This is to removes link from categories if there are none selected
       if !params[:link].has_key?("link_category_ids")
