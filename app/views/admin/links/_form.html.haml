@@ -19,7 +19,7 @@
 
 
       %h2.form-label= f.label :blurb
-      = f.text_area :blurb, :class => "big-area"
+      = f.text_area :blurb, :class => "big-area", :maxlength => 255
 
       - if current_user.is_super_user and !@link.permalink.blank?
         %h2.title.form-label= f.label :permalink, "Permalink"
