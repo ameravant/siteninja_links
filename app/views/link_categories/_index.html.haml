@@ -1,4 +1,3 @@
-%h1= yield(:meta_title)
 - if @cms_config['site_settings']['alphabetize_links']
   %ul.alphabet-list
     - ("a".."z").each do |letter|
@@ -7,5 +6,10 @@
       - else
         %li= link_to(letter.capitalize, "?letter=#{letter}")
 = will_paginate @links if (!@cms_config['site_settings']['links_pagination_position'] or @cms_config['site_settings']['links_pagination_position'] == "top" or @cms_config['site_settings']['links_pagination_position'] == "both")
-= render :partial => "links/link_for_list", :collection => @links
+- if @tmplate.template_html.links_index.blank?
+  %h1= yield(:meta_title)
+  = render :partial => "links/link_for_list", :collection => @links
+- else
+  - template = Liquid::Template.parse(@tmplate.template_html.links_index)
+  = template.render( 'link_list' => @links, 'title' => @page.title, 'description' => @page.body, 'link_loop' => (render :partial => 'links/link_for_liquid_layout', :collection => @links, :locals => { :link_loop => @tmplate.template_html.links_index_loop}))
 = will_paginate @links if (@cms_config['site_settings']['links_pagination_position'] == "both" or  @cms_config['site_settings']['links_pagination_position'] == "bottom")
