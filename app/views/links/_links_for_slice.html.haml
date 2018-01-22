@@ -5,7 +5,7 @@
 - count = section.count
 - if !Link.featured.blank?
   - if section.show_all_categories == true
-    - links = Link.featured[0..(count - 1)]
+    - links = Link.featured(:order => :position)[0..(count - 1)]
   - elsif categories.size == 1
     - links = Link.featured(:order => :position).reject{|p| !p.link_category_ids.include?(categories.first)}[0..count-1]
   - else
