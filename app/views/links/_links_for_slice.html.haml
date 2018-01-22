@@ -22,7 +22,7 @@
           %h3=link_to link.name, [link.link_category, link]
   - elsif section.section_format == "custom"
     - template = Liquid::Template.parse(section.section_layout)
-    = template.render( 'link_list' => links, 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links, :locals => { :section => section}))
+    = template.render( 'link_list' => links.sort_by(&:position), 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links.sort_by(&:position), :locals => { :section => section}))
   - elsif section.section_format == "extended"
     %ul.link-list.list_of_links
       - for link in links.sort_by(&:position)
