@@ -10,7 +10,7 @@
     - links = Link.featured(:order => :position).reject{|p| !p.link_category_ids.include?(categories.first)}[0..count-1]
   - else
     - #links = Link.featured.reject{|p| !(p.link_category_id {|pc| categories.include?(pc)})}
-    - links = Link.featured.reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
+    - links = Link.featured(:order => :position).reject{|p| !categories.include?(p.link_category_id) }[0..count-1]
 
   - if section.section_format.blank?
     %ul.link-list.list_of_links
