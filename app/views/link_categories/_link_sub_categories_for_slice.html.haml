@@ -4,18 +4,18 @@
       - if @link_category.images.empty?
         - image_path = nil
       - else
-        - image_path = @link_category.images.sort_by(&:position).first.large
+        - image = @link_category.images.sort_by(&:position).first
+        - image_path = @link_category.images.sort_by(&:position).first.image(:large)
       ==<a href="#{link_category_path(@link_category)}" class="link" title="#{@link_category.title}" style="background-image: url(#{image_path})">
-      = link_to(h(@link_category.title), @link_category, :class => "link", :title => @link_category.title)
       - unless @link_category.images.empty?
-        = image_tag(image.large, :alt => image.image_title, :title => image.image_title)
+        = image_tag(image.image(:large), :alt => image.image_title, :title => image.image_title)
       %h2= @link_category.title
       == </a>
       - if !@link_category.link_categories.active.empty?
         .link_sub_categories
-          - for c in category.link_categories.active
-            = render :partial => "link_categories/link_category_for_list", :locals => {:category => c}# unless c.links.empty?
+          - for c in @link_category.link_categories.active
+            = render :partial => "link_categories/link_category_with_image_for_list", :locals => {:category => c}# unless c.links.empty?
     - else
       %h2.top-headline= section.title
       %ul.list_of_links.categories
-        = render :partial => "link_categories/link_category_for_list", :locals => {:category => @link_category}
+        = render :partial => "link_categories/link_category_with_image_for_list", :locals => {:category => @link_category}
