@@ -1,0 +1,10 @@
+- if category.images.empty?
+  - image_path = nil
+- else
+  - image = category.images.sort_by(&:position).first
+  - image_path = category.images.sort_by(&:position).first.large
+==<a href="#{link_category_path(category)}" class="link" title="#{category.title}" style="background-image: url(#{image_path})">
+= link_to(h(category.title), category, :class => "link", :title => category.title)
+= image_tag(image.large, :alt => image.image_title, :title => image.image_title) unless category.images.empty?
+%h2= category.title
+==</a>
