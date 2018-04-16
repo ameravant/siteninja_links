@@ -1,5 +1,5 @@
 - if @link_category
-  - @link_category.parent_id.blank? ? lc = @link_category : lc = LinkCategory.find_by_id(@link_category.parent_id)
+  - @link_category.link_category_id.blank? ? lc = @link_category : lc = LinkCategory.find_by_id(@link_category.link_category_id)
   .link_main_category
     - if section.section_format == "with-thumb"
       - if lc.images.empty?
