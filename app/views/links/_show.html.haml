@@ -1,4 +1,4 @@
-%h1= link_to(@link.title, @link.url)
+%h1= @link.url.blank? ? @link.title : link_to(@link.title, @link.url)
 = @link.body.blank? ? @link.blurb : ninja_parse(@link.body)
 - unless @link.url.blank?
   %p= link_to("#{@cms_config['site_settings']['visit_link_text'] ? @cms_config['site_settings']['visit_link_text'] : 'Visit site'}", @link.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
