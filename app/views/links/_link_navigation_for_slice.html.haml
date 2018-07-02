@@ -1,0 +1,13 @@
+- if @link
+  - @previous_link = @link.link_category.links.find(:first, :conditions => {:position => (@link.position.to_i - 1)})
+  - @next_link = @link.link_category.links.find(:first, :conditions => {:position => (@link.position.to_i + 1)})
+  - unless @previous_link.blank? && @next_link.blank?
+    .link-navigation{:id => "section-#{section.id}"}
+      %h2= section.title
+      - unless @previous_link.blank?
+        - unless @previous_link.images.first(:conditions => {:show_in_image_box => true}).blank?
+          = link_to("&lt; #{image_tag(@previous_link.images.first(:conditions => {:show_in_image_box => true}).thumbnail)}", [@previous_link.link_category, @previous_link], :class => "previous-link")
+      - unless @next_link.blank?
+        - unless @next_link.images.first(:conditions => {:show_in_image_box => true}).blank?
+          = link_to("#{image_tag(@next_link.images.first(:conditions => {:show_in_image_box => true}).thumbnail)} &gt;", [@next_link.link_category, @next_link], :class => "next-link")
+      = clear
