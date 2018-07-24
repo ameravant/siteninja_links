@@ -34,6 +34,36 @@
           = f.label :link_main_column_id, "Link Layout"
         %dd.form-option
           = collection_select(:link_category, :link_main_column_id, @layouts, :id, :title, {:include_blank => "Same as Category"}, :class => "select")
+      - if @cms_config['modules']['members']
+        #permissions-box
+          %h2 Permissions
+          .note Who can access this Links in this Category?
+          %ul
+            %li
+              =f.radio_button :permission_level, "everyone"
+              =f.label :permission_level_everyone, "Everyone"
+            %li
+              =f.radio_button :permission_level, "administrators"
+              =f.label :permission_level_administrators, "Administrators Only"
+            %li
+              =f.radio_button :permission_level, "those checked"
+              =f.label :permission_level_those_checked, "All those checked below"
+            %li
+              =f.radio_button :permission_level, "except those checked"
+              =f.label :permission_level_except_those_checked, "Except for those checked below"
+          #permissions-groups
+            Select Groups
+            %ul
+              -for group in PersonGroup.is_role
+                %li
+                  -if @link_category.permission_level == "except those checked"
+                    = check_box_tag "link_category[person_group_ids][]", group.id, !@link_category.person_groups.include?(group), :id => "group_checkbox_#{group.id}"
+                  -else 
+                    = check_box_tag "link_category[person_group_ids][]", group.id, @link_category.person_groups.include?(group), :id => "group_checkbox_#{group.id}"
+                  = label_tag "group_checkbox_#{group.id}", group.title
+          %div
+            %input{:type => "button", :onclick => "jQuery.fancybox.close()", :value => "Done"}
+   
 
 - fancy_submit admin_link_categories_path do
   = f.submit "Save category"

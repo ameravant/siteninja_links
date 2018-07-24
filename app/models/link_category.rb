@@ -14,6 +14,7 @@ class LinkCategory < ActiveRecord::Base
   has_many :column_section_link_categories
   has_many :column_sections, :through => :column_section_link_categories
   default_scope :order => "title"
+  has_and_belongs_to_many :person_groups
   
 	def to_param
 	 "#{self.id}-#{self.permalink}"
