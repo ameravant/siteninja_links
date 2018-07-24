@@ -1,5 +1,8 @@
 class LinkCategoriesController < LinksController
   unloadable
+
+  before_filter :authenticate, :only => :show
+
   def index
     #expires_in 60.minutes, :public => true
     if !params[:tag].blank?
@@ -48,5 +51,16 @@ class LinkCategoriesController < LinksController
     @links = @link_category.links.active
     add_breadcrumb @link_category.title
   end
+
+  private
+
+  def authenticate
+    @link_category = LinkCategory.find(params[:id])
+    if @cms_config['modules']['members'] && @link_category.permission_level != "everyone"
+      session[:redirect] = request.request_uri
+      authorize(@link_category.person_groups.collect{|p| p.title}, @link_category.title)
+    end
+  end
+
 end
 
