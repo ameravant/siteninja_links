@@ -56,9 +56,22 @@ class LinkCategoriesController < LinksController
 
   def authenticate
     @link_category = LinkCategory.find(params[:id])
-    if @cms_config['modules']['members'] && @link_category.permission_level != "everyone"
+    if @link_category.link_category_id.blank?
+      @parent_category = @link_category
+    else
+      find_parent(@link_category.link_category)
+    end
+    if @cms_config['modules']['members'] && @parent_category.permission_level != "everyone"
       session[:redirect] = request.request_uri
-      authorize(@link_category.person_groups.collect{|p| p.title}, @link_category.title)
+      authorize(@parent_category.person_groups.collect{|p| p.title}, @parent_category.title)
+    end
+  end
+
+  def find_parent(link_category)
+    if link_category.link_category.blank?
+      @parent_category = link_category
+    else
+      find_parent(link_category.link_category)
     end
   end
 
