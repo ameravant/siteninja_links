@@ -79,14 +79,16 @@ class LinksController < ApplicationController
   def authenticate
     @link = Link.find(params[:id], :conditions => {:public => true})
     @link_category = @link.link_category
-    if @link_category.link_category_id.blank?
-      @parent_category = @link_category
-    else
-      find_parent(@link_category.link_category)
-    end
-    if @cms_config['modules']['members'] && @parent_category.permission_level != "everyone"
-      session[:redirect] = request.request_uri
-      authorize(@parent_category.person_groups.collect{|p| p.title}, @parent_category.title)
+    unless @link.link_category.blank?
+      if @link_category.link_category_id.blank?
+        @parent_category = @link_category
+      else
+        find_parent(@link_category.link_category)
+      end
+      if @cms_config['modules']['members'] && @parent_category.permission_level != "everyone"
+        session[:redirect] = request.request_uri
+        authorize(@parent_category.person_groups.collect{|p| p.title}, @parent_category.title)
+      end
     end
   end
 
