@@ -82,7 +82,7 @@
               = link_to(link.title, [:edit, :admin, link])
             .link-options
               = feature_icon_select(link, link.title)
-              = link_to("", new_admin_link_path(:duplicate_id => link.id), :class => "icon fa fa-files-o", :title => "Copy")
+              = link_to("", new_admin_link_path(:duplicate_id => link.id), :class => "icon fa fa-copy", :title => "Copy")
               = icon "Write", [:edit, :admin, link]
               = trash_icon(link, [:admin, link], "#{link.title}")
             .link-images
