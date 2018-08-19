@@ -4,24 +4,21 @@
     - for link in link_category.links.sort_by(&:position)
       %li{:id => "#{dom_id(link)}"}
         .link-title
-          = image_tag("#{move_loc}", :class => "icon handle")
+          ==<i class='fas fa-grip-vertical'></i>
           = link_to(link.title, [:edit, :admin, link])
         .link-options
           = feature_icon_select(link, link.title)
-          = link_to("", new_admin_link_path(:duplicate_id => link.id), :class => "icon fa fa-copy", :title => "Copy")
-          = icon "Write", [:edit, :admin, link]
+          = link_to("<i class='far fa-copy'></i>", new_admin_link_path(:duplicate_id => link.id), :title => "Copy")
+          = link_to("<i class='far fa-edit'></i>", [:edit, :admin, link])
           = trash_icon(link, [:admin, link], "#{link.title}")
         .link-images
-          = icon "Picture", [:admin, link, :images]
-          = link_to link.images_count, [:admin, link, :images]
+          = link_to("<i class='fas fa-images'></i>  #{link.images_count}", [:admin, link, :images])
           = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
         .link-files
           - if link.assets_count < 1
-            = icon "Document", [:new, :admin, link, :asset]
-            = link_to link.assets_count, [:new, :admin, link, :asset]
+            = link_to("<i class=\"far fa-file-alt\"></i> #{link.assets_count}", [:new, :admin, link, :asset])
           - else
-            = icon "Document", [:admin, link, :assets]
-            = link_to link.assets_count, [:admin, link, :assets]
+            = link_to("<i class=\"far fa-file-alt\"></i> #{link.assets_count}", [:admin, link, :assets])
         .link-status
           = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
         = clear
