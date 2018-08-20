@@ -1,22 +1,25 @@
+- content_for(:meta_title) do
+  =@cms_config['site_settings']['links_title']
 - content_for :head do
   %style{:type => "text/css", :media => "screen"}
     ul.sortable { list-style: none; margin: 4px 0 0 -32px; }
     ul.sortable ul { margin: 4px 0 0 -20px; }
     ul.sortable li { line-height: 2em; }
-    div.link-title-header { float: left; width: 60px; color: #666; margin: 0 0 0 10px; }
+    ul.sortable li { border-bottom: 4px solid rgba(0,0,0,.05); background: rgba(255,255,255,.35); }
+    div.link-title-header { float: left; width: 60px; color: #666; margin: 0 0 0 6px; }
     div.link-options-header { float: right; width: 134px; text-align: left; color: #666; }
     div.link-images-header { float: right; width: 100px; text-align: left; margin-right: 20px; color: #666; }
     div.link-files-header { float: right; width: 100px; text-align: left; margin-right: 20px; color: #666; }
     div.link-testimonials-header { float: right; width: 100px; text-align: left; margin-right: 20px; color: #666; }
     div.link-status-header { float: right; width: 150px; text-align: left; margin-right: 20px; color: #666; }
     div.link-images { float: left; margin-right: 20px; }
-    div.link-title { float: left; margin-right: 20px; width: 340px; }
+    div.link-title { float: left; margin-right: 20px; width: 340px;  }
+    ul.paginated div.link-title { padding-left: 10px; }
     div.link-options { text-align: right; float: right; width: 134px; }
     div.link-images { float: right; margin-right: 20px; width: 100px; text-align: left; }
     div.link-files { float: right; margin-right: 20px; width: 100px; text-align: left; }
     div.link-testimonials { float: right; margin-right: 20px; width: 100px; text-align: left; }
     div.link-status { float: right; margin-right: 20px; width: 150px; text-align: left; font-size: .8em; }
-    ul.sortable li { border-bottom: 4px solid rgba(0,0,0,.05); background: rgba(255,255,255,.35); }
     h2.category { font-family: Tahoma, Arial, sans-serif; font-size: 1.2em; margin: 20px 0px 0px 10px;}
     ==ul.top-options { margin: 0; padding: 0; list-style: none; }
     ==.pagination { margin: 5px 10px; }
@@ -82,7 +85,7 @@
               = link_to("<i class='far fa-edit'></i>", [:edit, :admin, link])
               = trash_icon(link, [:admin, link], "#{link.title}")
             .link-images
-              = link_to("<i class='fas fa-images'></i>  #{link.images_count}", [:admin, link, :images])
+              = link_to("<i class='fas fa-images'></i> #{link.images_count}", [:admin, link, :images])
               = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
             .link-files
               - if link.assets_count < 1
