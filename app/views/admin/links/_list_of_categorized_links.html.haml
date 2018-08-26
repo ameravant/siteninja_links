@@ -12,7 +12,7 @@
           = link_to("<i class='far fa-edit'></i>", [:edit, :admin, link])
           = trash_icon(link, [:admin, link], "#{link.title}")
         .link-images
-          = link_to("<i class='fas fa-images'></i>  #{link.images_count}", [:admin, link, :images])
+          = link_to("<i class='fas fa-images'></i> #{link.images_count}", [:admin, link, :images])
           = image_tag(link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless link.images.empty?
         .link-files
           - if link.assets_count < 1

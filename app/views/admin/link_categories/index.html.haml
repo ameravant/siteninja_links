@@ -3,9 +3,7 @@
 
 - content_for :head do
   %style{:type => "text/css", :media => "screen"}
-    ul.lc { list-style: none; margin: 0 0 0 -30px; }
-    ul.lc ul { margin: 0 0 0 -20px; }
-    ul.lc li { line-height: 2em; }
+
     div#lc-title-header { float: left; width: 60px; font-weight: bold; color: #666; margin: 0 0 0 10px; }
     div#lc-options-header { float: right; width: 60px; text-align: left; font-weight: bold; color: #666; }
     div#lc-resources-header { float: right; width: 100px; text-align: left; font-weight: bold; margin-right: 20px; color: #666; }
@@ -13,7 +11,7 @@
     div#lc-resources { float: left; margin-right: 20px; }
     div.lc-images { float: right; margin-right: 20px; width: 100px; }
     div.lc-title { float: left; margin-right: 20px; }
-    div.lc-options { text-align: left; float: right; width: 60px; }
+    div.lc-options { text-align: left; float: right; width: 66px; }
     div.lc-resources { float: right; margin-right: 48px; width: 60px; text-align: left; }
     ul.sortable li { border-bottom: #ccc 1px solid; }
     h2.category { font-family: Tahoma, Arial, sans-serif; font-size: 1.2em; margin: 20px 0px 0px 10px}
@@ -31,15 +29,14 @@
     ==.menu-item-inner { background: #fff; }
 #link-category-index
 
-  %h1= large_icon('Folder2') + ' ' + yield(:meta_title).strip
+  %h1= '<i class="fas fa-link"></i> ' + yield(:meta_title).strip
 
   %div.box
     #reorder_status.gray.float-right{:style => "display: none"}
       = spinner
       Reordering categories...
     %span.hmenu
-      = icon "Plus", new_admin_link_category_path
-      = link_to "Make a new category", new_admin_link_category_path
+      = link_to "<i class=\"fas fa-plus-circle\"></i> Make a new category", new_admin_link_category_path
     = clear
 
   %br

@@ -3,20 +3,17 @@
     = link_to(paginated_link.title, [:edit, :admin, paginated_link])
   .link-options
     = feature_icon_select(paginated_link, paginated_link.title)
-    = link_to("", new_admin_link_path(:duplicate_id => paginated_link.id), :class => "icon fa fa-copy", :title => "Copy")
-    = icon "Write", [:edit, :admin, paginated_link]
+    = link_to("<i class='far fa-copy'></i>", new_admin_link_path(:duplicate_id => paginated_link.id), :title => "Copy")
+    = link_to "<i class='far fa-edit'></i>", [:edit, :admin, paginated_link]
     = trash_icon(paginated_link, [:admin, paginated_link], "#{paginated_link.title}")
   .link-images
-    = icon "Picture", [:admin, paginated_link, :images]
-    = link_to paginated_link.images_count, [:admin, paginated_link, :images]
+    = link_to "<i class='fas fa-images'></i> #{paginated_link.images_count}", [:admin, paginated_link, :images]
     = image_tag(paginated_link.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless paginated_link.images.empty?
   .link-files
     - if paginated_link.assets_count < 1
-      = icon "Document", [:new, :admin, paginated_link, :asset]
-      = link_to paginated_link.assets_count, [:new, :admin, paginated_link, :asset]
+      = link_to "<i class=\"far fa-file-alt\"></i> #{paginated_link.assets_count}", [:new, :admin, paginated_link, :asset]
     - else
-      = icon "Document", [:admin, paginated_link, :assets]
-      = link_to paginated_link.assets_count, [:admin, paginated_link, :assets]
+      = link_to "<i class=\"far fa-file-alt\"></i> #{paginated_link.assets_count}", [:admin, paginated_link, :assets]
   .link-status
     = paginated_link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
   = clear

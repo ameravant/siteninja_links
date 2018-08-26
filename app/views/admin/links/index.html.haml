@@ -23,9 +23,9 @@
     h2.category { font-family: Tahoma, Arial, sans-serif; font-size: 1.2em; margin: 20px 0px 0px 10px;}
     ==ul.top-options { margin: 0; padding: 0; list-style: none; }
     ==.pagination { margin: 5px 10px; }
-    ==.link-category { margin: 4px 0 0; }
+    ==.link-category { margin: 0 0 0; border-left: 4px solid rgba(0,0,0,.05); }
     ==.link-category .category { font-size: 1.4em; padding: 8px;  }
-    ==.link-category .link-category { margin-right: 0; margin-left: 8px; margin-top: 0; border-right: 0; background: rgba(0,0,0,.025); }
+    ==.link-category .link-category { margin-right: 0; margin-left: 0; margin-top: 0; border-right: 0; border-left: 8px solid rgba(0,0,0,.05); }
 - if @paginate_link_index 
   .float-right
     %ul.top-options

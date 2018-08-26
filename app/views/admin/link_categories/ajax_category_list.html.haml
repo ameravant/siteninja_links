@@ -12,12 +12,11 @@
               = navigation_icon(child, child.title, "inline")
             - else
               = activate_navigation_icon(child, [:new, :admin, child, :menu], child.title, "inline")
-            = icon "Write", edit_admin_link_category_path(child)
+            = link_to "<i class='far fa-edit'></i>", edit_admin_link_category_path(child)
             = trash_icon(child, admin_link_category_path(child), "the #{child.title} category") unless child.links.size > 0
           .lc-resources= number_with_delimiter(child.links.count)
           .lc-images
-            = icon "Picture", [:admin, child, :images]
-            = link_to child.images_count, [:admin, child, :images]
+            = link_to "<i class='fas fa-images'></i> #{child.images_count}", [:admin, child, :images]
             = image_tag(child.images.sort_by(&:position).first.image.url(:icon), :class => "icon thumb") unless child.images.empty?
           = clear
           .droppable{:id => "droppable_#{dom_id(child)}"}
