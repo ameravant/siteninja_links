@@ -15,7 +15,7 @@
   - if section.section_format.blank?
     %ul.link-list.list_of_links
       - for link in links
-        %li.link
+        %li.link{:class => "#{@link && @link.id == link.id ? 'sidebar_link_active selected' : ''}"}
           - unless link.images.blank? 
             =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), [link.link_category, link], :class => "link-image"
 
