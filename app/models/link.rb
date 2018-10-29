@@ -12,6 +12,7 @@ class Link < ActiveRecord::Base
   has_many :assets, :as => :attachable, :dependent => :destroy
   has_many :features, :as => :featurable, :dependent => :destroy
   has_many :menus, :as => :navigatable, :dependent => :destroy
+  belongs_to :link_layout, :class_name => "Column", :foreign_key => :link_main_column_id
   default_scope :order => :position
   accepts_nested_attributes_for :images
   

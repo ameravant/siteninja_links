@@ -104,15 +104,72 @@ class Admin::LinksController < AdminController
     respond_to :js
   end
 
+  def preview
+    if !params[:reload]
+      @page = Page.find_by_permalink!('links')
+      get_page_defaults(@page)
+      @menu = @page.menus.first
+      @admin = false
+      @hide_admin_menu = true
+      
+      
+      @link = Link.new(JSON.parse(@settings.link_preview))
+      @images = @link.permalink.blank? ? [] : Link.find_by_permalink(@link.permalink).images
+      @owner = @link
+      @link_category = @link.link_category
+      if !@link_category
+        @main_column = Column.find(@page.main_column_id)
+      elsif !@link_category.link_layout.blank?
+        @main_column = Column.find(@link_category.link_main_column_id)
+      elsif @link_category.page_layout.blank?
+        if @page.page_layout.blank?
+          @main_column = Column.first(:conditions => {:title => "Default", :column_location => "main_column"})
+        else
+          @main_column = Column.find(@page.main_column_id)
+        end
+      else
+        @main_column = Column.find(@link_category.main_column_id)
+      end
+
+
+      @link_category = @link.link_category || @link.link_categories.first
+
+
+    end
+  end
+
+  def post_preview
+    @settings.update_attributes(:link_preview => ActiveSupport::JSON.encode(params[:preview_link]))
+    File.open(@cms_path, 'w') { |f| YAML.dump(@cms_config, f) }
+  end
+  
+  def ajax_preview
+    @page = Page.find_by_permalink!('links')
+    get_page_defaults(@page)
+    @menu = @page.menus.first
+    @admin = false
+    @hide_admin_menu = true
+    
+    
+    @link = Link.new(JSON.parse(@settings.blog_preview))
+    @images = @link.permalink.blank? ? [] : Link.find_by_permalink(@link.permalink).images
+    params[:link_link_category_id].blank? ? @side_column_sections = ColumnSection.all(:conditions => {:column_id => @page.column_id, :visible => true}) : @side_column_sections = ColumnSection.all(:conditions => {:column_id => LinkCategory.find(params[:link_link_category_id]).column_id, :visible => true})
+    @owner = @link
+    @link_category = @link.link_category || @link.link_categories.first
+    @link.link_category.blank? ? @side_column_sections = ColumnSection.all(:conditions => {:column_id => @page.column_id, :visible => true}) : @side_column_sections = ColumnSection.all(:conditions => {:column_id => @link.link_category.column_id, :visible => true})
+    
+    render :layout => false
+  end
+
   private
 
   def find_link
-    begin
+    #begin
       @link = Link.find(params[:id])
-    rescue
-      flash[:error] = "Link not found."
-      redirect_to admin_links_path
-    end
+    #rescue
+    #  flash[:error] = "Link not found."
+    #  redirect_to admin_links_path
+    #end
   end
 
   def find_link_categories

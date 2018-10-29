@@ -34,7 +34,7 @@
           = f.label :link_main_column_id, "Link Layout"
         %dd.form-option
           = collection_select(:link_category, :link_main_column_id, @layouts, :id, :title, {:include_blank => "Same as Category"}, :class => "select")
-      - if @cms_config['modules']['members'] and @link_category.link_category.blank?
+      - if @cms_config['modules']['members'] and !@link_category.link_category
         #permissions-box
           %h2 Permissions
           .note Who can access this Links in this Category?

@@ -1,9 +1,35 @@
-%fieldset
-  -if @link_categories.blank?
-    = link_to("Please create at least one category before trying to save.", admin_link_categories_path, :class => "required", :style => "color: #AC0000")
+- @responsive = true
+- @body_class = "responsive-form-body"
+= f.error_messages
+- content_for :head do
+  %script{:type => "text/javascript"}
+    jQuery(document).ready(function() {
+    setLink();
+   
+    }); 
+    function setLink(){
+    try {
+    document.getElementById('preview_link_body').value = tinyMCE.get('link_body').getContent();
+    }
+    catch(err) {
+    document.getElementById('preview_link_body').value = document.getElementById('link_body').value;
+    }
+    document.getElementById('preview_link_title').value = document.getElementById('link_title').value
+    document.getElementById('preview_link_url').value = document.getElementById('link_url').value
+    document.getElementById('preview_link_blurb').value = document.getElementById('link_blurb').value
+    document.getElementById('preview_link_link_category_id').value = document.getElementById('link_link_category_id').value
+    document.getElementById('preview_link_public').checked = document.getElementById('link_public').checked
+    document.getElementById('preview_link_featured').checked = document.getElementById('link_featured').checked
+    document.getElementById('preview_link_description').value = document.getElementById('link_description').value
+    document.getElementById('submit-preview').click();
+    }
 
-  = f.error_messages
-  .responsive-form
+
+.responsive-form
+  %fieldset
+    -if @link_categories.blank?
+      = link_to("Please create at least one category before trying to save.", admin_link_categories_path, :class => "required", :style => "color: #AC0000")
+
     .main-fields
       %h2.form-label= f.label :title
       .note
@@ -83,47 +109,67 @@
     - fancy_submit admin_links_path do
       = f.submit "Save #{@cms_config['site_settings']['link_title']}"
 
-- content_for :head do
-  %style{:type => "text/css"}
-    - if @link.restrict_link
-      == #body-wrapper { display: none; }
-      == #link_body_ifr { height: 700px !important; }
-    ==#secondary-categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 200px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); }
-  - content_for :footer do 
-    %script{:type => "text/javascript"}
-      jQuery(document).ready(function() {
-      jQuery("#secondary-categories").hide();
-      jQuery("#display-secondary-categories").click(function()
-      {
-      jQuery("#secondary-categories").slideToggle(500);
-      });
-      jQuery(".fancy-iframe").fancybox({ 
-      'zoomSpeedIn': 300,
-      'zoomSpeedOut': 300,
-      'overlayShow': true,
-      'hideOnContentClick': 'true',
-      'easingOut': 'easeOutQuad',
-      'easingIn': 'easeInQuad',
-      'type': 'iframe',
-      'width': 910,
-      'autoScale': true,
-      'height':"90%"
-      }); 
-      jQuery(".fancy-inline").fancybox({ 
-      'zoomSpeedIn': 300,
-      'zoomSpeedOut': 300,
-      'overlayShow': true,
-      'hideOnContentClick': false,
-      'hideOnOverlayClick': false,
-      'type': 'inline',
-      'showCloseButton' : false,
-      'autoScale': true
-      });
-      jQuery("#link_restrict_link").click(function()
-      {
-      jQuery("#body-wrapper").toggle();
-      });
-      });
-      function addtext(text) {
-      tinymce.get("link_body").insertContent(text);
-      }
+    = render :partial => 'admin/pages/responsive_preview', :locals => {:controller => "links", :ajax => true, :extended => false}
+  - content_for :head do
+    %style{:type => "text/css"}
+      - if @link.restrict_link
+        == #body-wrapper { display: none; }
+        == #link_body_ifr { height: 700px !important; }
+      ==#secondary-categories { padding: 5px; border: 1px solid #ccc; background: #fff; color: #333; position: absolute; width: 200px; font-size: .9em; height: 200px; overflow: auto; -moz-box-shadow: 0 4px 10px rgba(0,0,0,.6); -webkit-box-shadow: 0 4px 10px rgba(0,0,0,.6); box-shadow: 0 4px 10px rgba(0,0,0,.6); }
+    - content_for :footer do 
+      %script{:type => "text/javascript"}
+        jQuery(document).ready(function() {
+        jQuery("#secondary-categories").hide();
+        jQuery("#display-secondary-categories").click(function()
+        {
+        jQuery("#secondary-categories").slideToggle(500);
+        });
+        jQuery(".fancy-iframe").fancybox({ 
+        'zoomSpeedIn': 300,
+        'zoomSpeedOut': 300,
+        'overlayShow': true,
+        'hideOnContentClick': 'true',
+        'easingOut': 'easeOutQuad',
+        'easingIn': 'easeInQuad',
+        'type': 'iframe',
+        'width': 910,
+        'autoScale': true,
+        'height':"90%"
+        }); 
+        jQuery(".fancy-inline").fancybox({ 
+        'zoomSpeedIn': 300,
+        'zoomSpeedOut': 300,
+        'overlayShow': true,
+        'hideOnContentClick': false,
+        'hideOnOverlayClick': false,
+        'type': 'inline',
+        'showCloseButton' : false,
+        'autoScale': true
+        });
+        jQuery("#link_restrict_link").click(function()
+        {
+        jQuery("#body-wrapper").toggle();
+        });
+        });
+        function addtext(text) {
+        tinymce.get("link_body").insertContent(text);
+        }
+
+
+      
+  - content_for :pre_footer do
+    %div{:style => "display: none;"}
+      - form_remote_for :preview_link, :url => post_preview_admin_links_path, :method => "put",:success => "setPreviewContent();", :html => {:name => "post_preview"} do
+        = text_field :preview_link, :permalink, :value => @link.permalink
+        = text_area :preview_link, :body
+        = text_area :preview_link, :title
+        = text_area :preview_link, :blurb
+        = text_field :preview_link, :url
+        = text_field :preview_link, :link_category_id
+        = check_box :preview_link, :public
+        = check_box :preview_link, :featured
+        = check_box :preview_link, :restrict_link
+        = text_area :preview_link, :description
+        = check_box :preview_link, :blurb
+        = text_field :id, :value => @link.id
+        = submit_tag "submit", :id => "submit-preview"
