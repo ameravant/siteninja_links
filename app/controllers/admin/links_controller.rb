@@ -116,7 +116,9 @@ class Admin::LinksController < AdminController
       @link = Link.new(JSON.parse(@settings.link_preview))
       @images = @link.permalink.blank? ? [] : Link.find_by_permalink(@link.permalink).images
       @owner = @link
-      @link_category = @link.link_category
+      if !@link.link_category_id.blank?
+        @link_category = LinkCategory.find_by_id(@link.link_category_id) || @link.link_categories.first?
+      end
       if !@link_category
         @main_column = Column.find(@page.main_column_id)
       elsif !@link_category.link_layout.blank?
@@ -130,10 +132,8 @@ class Admin::LinksController < AdminController
       else
         @main_column = Column.find(@link_category.main_column_id)
       end
-
-
-      @link_category = @link.link_category || @link.link_categories.first
-
+  
+      @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
 
     end
   end
