@@ -160,7 +160,7 @@
   - content_for :pre_footer do
     %div{:style => "display: none;"}
       - form_remote_for :preview_link, :url => post_preview_admin_links_path, :method => "put",:success => "setPreviewContent();", :html => {:name => "post_preview"} do
-        = text_field :preview_link, :permalink, :value => @link.permalink
+        = text_field :preview_link, :permalink, :value => @link.permalink         
         = text_area :preview_link, :body
         = text_area :preview_link, :title
         = text_area :preview_link, :blurb

@@ -132,10 +132,15 @@ class Admin::LinksController < AdminController
       else
         @main_column = Column.find(@link_category.main_column_id)
       end
-  
+      if !@main_column
+        @main_column = Column.find(@page.main_column_id)
+      end
       @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
 
     end
+    logger.info "08012494120419741270412741297414721049217420179420941270419204129"
+    logger.info @main_column_sections
+    logger.info "09328904370911298732091328031298120942-42-8-420-4721-110842-10-8421-024"
   end
 
   def post_preview
@@ -151,13 +156,30 @@ class Admin::LinksController < AdminController
     @hide_admin_menu = true
     
     
-    @link = Link.new(JSON.parse(@settings.blog_preview))
+    @link = Link.new(JSON.parse(@settings.link_preview))
     @images = @link.permalink.blank? ? [] : Link.find_by_permalink(@link.permalink).images
-    params[:link_link_category_id].blank? ? @side_column_sections = ColumnSection.all(:conditions => {:column_id => @page.column_id, :visible => true}) : @side_column_sections = ColumnSection.all(:conditions => {:column_id => LinkCategory.find(params[:link_link_category_id]).column_id, :visible => true})
     @owner = @link
-    @link_category = @link.link_category || @link.link_categories.first
-    @link.link_category.blank? ? @side_column_sections = ColumnSection.all(:conditions => {:column_id => @page.column_id, :visible => true}) : @side_column_sections = ColumnSection.all(:conditions => {:column_id => @link.link_category.column_id, :visible => true})
-    
+    if !@link.link_category_id.blank?
+      @link_category = LinkCategory.find_by_id(@link.link_category_id) || @link.link_categories.first?
+    end
+    if !@link_category
+      @main_column = Column.find(@page.main_column_id)
+    elsif !@link_category.link_layout.blank?
+      @main_column = Column.find(@link_category.link_main_column_id)
+    elsif @link_category.page_layout.blank?
+      if @page.page_layout.blank?
+        @main_column = Column.first(:conditions => {:title => "Default", :column_location => "main_column"})
+      else
+        @main_column = Column.find(@page.main_column_id)
+      end
+    else
+      @main_column = Column.find(@link_category.main_column_id)
+    end
+    if !@main_column
+      @main_column = Column.find(@page.main_column_id)
+    end
+    @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
+
     render :layout => false
   end
 
