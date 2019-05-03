@@ -5,6 +5,7 @@ class Admin::LinksController < AdminController
   before_filter :find_link_categories, :only => [ :new, :create, :edit, :update, :index ]
 
   def index
+    session[:redirect_path] = admin_links_path
     if params[:q].blank?
       @links = Link.all.sort_by(&:position)
     else
@@ -93,7 +94,7 @@ class Admin::LinksController < AdminController
       @link.link_category_ids = []
       @link.link_category_ids = ac_ids
       flash[:notice] = "Link \"#{@link.title}\" updated."
-      redirect_to admin_links_path
+      redirect_to session[:redirect_path] ? session[:redirect_path] : admin_links_path
     else
       render :action => "edit"
     end

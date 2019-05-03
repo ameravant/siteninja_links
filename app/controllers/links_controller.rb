@@ -27,6 +27,11 @@ class LinksController < ApplicationController
   def show
     #expires_in 60.minutes, :public => true
     @link = Link.find(params[:id], :conditions => {:public => true})
+
+    @edit_path = [:edit, :admin, @link]
+    @edit_type = "Link"
+    session[:redirect_path] = link_category_link_path(@link.link_category, @link)
+
     @images = @link.images
     @link_category = @link.link_category
     @menu = @link_category.menus.first if !@link_category.blank? and !@link_category.menus.empty?
