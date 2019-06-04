@@ -48,7 +48,9 @@ class LinkCategoriesController < LinksController
       @main_column = Column.find(@link_category.main_column_id)
     end
     @main_column_sections = ColumnSection.all(:conditions => {:column_id => @main_column.id, :visible => true, :column_section_id => nil})
-    @links = @link_category.links.active
+    count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 20
+    count = @link_category.pagination_count if !@link_category.pagination_count.blank?
+    @links = @link_category.links.active.paginate(:page => params[:page], :per_page => count)
     add_breadcrumb @link_category.title
   end
 
