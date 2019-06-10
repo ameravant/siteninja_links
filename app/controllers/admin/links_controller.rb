@@ -94,7 +94,7 @@ class Admin::LinksController < AdminController
       @link.link_category_ids = []
       @link.link_category_ids = ac_ids
       flash[:notice] = "Link \"#{@link.title}\" updated."
-      redirect_to session[:redirect_path] ? session[:redirect_path] : admin_links_path
+      redirect_to params[:redirect_path] ? params[:redirect_path] : admin_links_path
     else
       render :action => "edit"
     end
