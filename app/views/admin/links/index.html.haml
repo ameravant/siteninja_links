@@ -96,7 +96,7 @@
               = link.active ? "<span class=\"green\">Approved</span>" : "<span class=\"gray\">Waiting Approval</span>"
             = clear
       - for lc in link_category.link_categories
-        = render :partial => "list_of_categorized_links", :locals => {:link_category => lc}
+        = render :partial => "list_of_categorized_links", :locals => {:link_category => lc}, :cache => true
 
       = sortable_element("tree_#{link_category.id}", :url => reorder_admin_links_path + "?link_category_id=#{link_category.id}", :method => :put, :loading => "$('ajax_spinner').src='#{spinner_loc}'; $('reorder_status').show();", :success => "$('ajax_spinner').src='#{ok_loc}'", :failure => "$('ajax_spinner').src='#{exclamation_loc}'", :complete => visual_effect(:fade, "reorder_status", :delay => 1))
 
