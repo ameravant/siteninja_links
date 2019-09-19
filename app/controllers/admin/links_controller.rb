@@ -66,6 +66,7 @@ class Admin::LinksController < AdminController
     @link = Link.new(params[:link])
     params[:link][:link_category_ids] ||= []
     @link.link_categories << LinkCategory.find(params[:link][:link_category_id]) unless params[:link][:link_category_id].blank? 
+    expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     if @link.save
       flash[:notice] = "Link \"#{@link.title}\" created."
       redirect_to admin_links_path
@@ -78,6 +79,7 @@ class Admin::LinksController < AdminController
     params["tree_#{params[:link_category_id]}"].each_with_index do |id, position|
       Link.update(id, :position => position + 1)
     end
+    expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     render :nothing => true
   end
 
@@ -102,6 +104,7 @@ class Admin::LinksController < AdminController
 
   def destroy
     @link.destroy
+    expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     respond_to :js
   end
 
