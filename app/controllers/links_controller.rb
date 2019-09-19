@@ -6,17 +6,16 @@ class LinksController < ApplicationController
 
   def index
     @link_categories = LinkCategory.all(:conditions => {:link_category_id => nil})
+    count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 20
     if !params[:tag].blank?
       # Filter link by tag
-      all_links = Link.active.find_tagged_with(params[:tag])
+      @links = Link.active.find_tagged_with(params[:tag]).paginate(:page => params[:page], :per_page => count)
       add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
       add_breadcrumb params[:tag]
     else
       add_breadcrumb @cms_config['site_settings']['links_title']
-      all_links = Link.find(:all, :conditions => {:public => true}, :order => @cms_config['site_settings']['links_alphabetical'] ? :title : :position)
+      @links = Link.find(:all, :conditions => {:public => true}, :order => @cms_config['site_settings']['links_alphabetical'] ? :title : :position).paginate(:page => params[:page], :per_page => count)
     end
-    count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 20
-    @links = all_links.paginate(:page => params[:page], :per_page => count)
     respond_to do |wants|
       wants.html # index.html.erb
       wants.xml { render :xml => all_links.to_xml }
