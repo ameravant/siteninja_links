@@ -46,7 +46,7 @@
     %ul.top-options
       %li= link_to("Show Alphabetical View", "/admin/links?paginate_link_index=true", :title => "Display paginated alphabetical view of all Links.")
       - if @cms_config['site_settings']['paginate_link_index']
-        %li= link_to("Save as default view", "/admin/links?default_view=paginate")
+        %li= link_to("Save as default view", "/admin/links?default_view=categories")
   %h1= '<i class="fas fa-link"></i> ' + "#{@cms_config['site_settings']['links_title']}"
   .box
     #reorder_status.gray.float-right{:style => "display: none"}
