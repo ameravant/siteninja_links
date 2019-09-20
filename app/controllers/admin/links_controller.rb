@@ -6,11 +6,11 @@ class Admin::LinksController < AdminController
 
   def index
     session[:redirect_path] = admin_links_path
-    if params[:q].blank?
-      @links = Link.all.sort_by(&:position)
-    else
-      @links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"])
-    end
+    # if params[:q].blank?
+    #   @links = Link.all.sort_by(&:position)
+    # else
+    #   @links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"])
+    # end
     add_breadcrumb @cms_config['site_settings']['links_title']
     
     
