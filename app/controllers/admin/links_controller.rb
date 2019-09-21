@@ -85,6 +85,7 @@ class Admin::LinksController < AdminController
 
   def update
     expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
+    expire_fragment(:controller => "admin/links", :action => "index", :action_suffix => "link-#{@link.id}")
     params[:link][:link_category_ids] ||= []
     params[:link][:link_category_ids] << params[:link][:link_category_id] unless params[:link][:link_category_id].blank?
     if @link.update_attributes(params[:link])
