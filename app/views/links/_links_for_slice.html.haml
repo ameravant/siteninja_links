@@ -15,24 +15,26 @@
   - if section.section_format.blank?
     %ul.link-list.list_of_links
       - for link in links
-        %li.link{:id => "#{link.permalink}", :class => "#{@link && @link.id == link.id ? 'sidebar_link_active selected' : ''}"}
-          - unless link.images.blank? 
-            =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link.restrict_link? ? link.url : [link.link_category, link], :class => "link-image", :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
+        - cache(:controller => "links", :action => "index", :action_suffix => "link-concise-#{link.id}") do
+          %li.link{:id => "#{link.permalink}", :class => "#{@link && @link.id == link.id ? 'sidebar_link_active selected' : ''}"}
+            - unless link.images.blank? 
+              =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link.restrict_link? ? link.url : [link.link_category, link], :class => "link-image", :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
 
-          %h3=link_to link.name, link.restrict_link? ? link.url : [link.link_category, link], :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
+            %h3=link_to link.name, link.restrict_link? ? link.url : [link.link_category, link], :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
   - elsif section.section_format == "custom"
     - template = Liquid::Template.parse(section.section_layout)
     = template.render( 'link_list' => links.sort_by(&:position), 'title' => section.title, 'link_loop' => (render :partial => 'links/link_for_custom_slice', :collection => links.sort_by(&:position), :locals => { :section => section}))
   - elsif section.section_format == "extended"
     %ul.link-list.list_of_links
       - for link in links.sort_by(&:position)
-        %li.link
-          - unless link.images.blank? 
-            =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link.restrict_link? ? link.url : [link.link_category, link], :class => "link-image", :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
+        - cache(:controller => "links", :action => "index", :action_suffix => "link-extended-#{link.id}") do
+          %li.link
+            - unless link.images.blank? 
+              =link_to image_tag(link.images.first.thumbnail, :title => link.title, :alt => link.title), link.restrict_link? ? link.url : [link.link_category, link], :class => "link-image", :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
 
-          %h3= link_to link.name, link.restrict_link? ? link.url : [link.link_category, link], :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
-          - if !link.blurb.blank?
-            .link-description
-              = link.blurb
-          .link-more-info
-            = link_to("More Info", link)
+            %h3= link_to link.name, link.restrict_link? ? link.url : [link.link_category, link], :target => "#{link.restrict_link? && @cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}"
+            - if !link.blurb.blank?
+              .link-description
+                = link.blurb
+            .link-more-info
+              = link_to("More Info", link)

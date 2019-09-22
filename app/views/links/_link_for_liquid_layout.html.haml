@@ -1,10 +1,11 @@
-- template = Liquid::Template.parse(link_loop)
-- if link_for_liquid_layout.images.empty?
-  - thumbnail = ""
-  - large_image = ""
-  - medium_image = ""
-- else
-  - thumbnail = link_for_liquid_layout.images.first.thumbnail
-  - large_image = link_for_liquid_layout.images.first.image(:large)
-  - medium_image = link_for_liquid_layout.images.first.image(:medium)
-= template.render( 'link' => link_for_liquid_layout, 'title' => link_for_liquid_layout.title, 'url' => link_for_liquid_layout.url, 'blurb' => (link_for_liquid_layout.blurb), 'body' => ninja_parse(link_for_liquid_layout.body), 'attachments' => (render :partial => "links/link_attachments", :locals => { :link => link_for_liquid_layout }), 'link_path' => (link_for_liquid_layout.restrict_link ? link_for_liquid_layout.url : link_category_link_path(link_for_liquid_layout.link_category, link_for_liquid_layout)), 'thumbnail' => thumbnail, 'large_image' => large_image, 'medium_image' => medium_image )
+- cache(:controller => "links", :action => "index", :action_suffix => "link-#{link_for_liquid_layout.id}") do
+  - template = Liquid::Template.parse(link_loop)
+  - if link_for_liquid_layout.images.empty?
+    - thumbnail = ""
+    - large_image = ""
+    - medium_image = ""
+  - else
+    - thumbnail = link_for_liquid_layout.images.first.thumbnail
+    - large_image = link_for_liquid_layout.images.first.image(:large)
+    - medium_image = link_for_liquid_layout.images.first.image(:medium)
+  = template.render( 'link' => link_for_liquid_layout, 'title' => link_for_liquid_layout.title, 'url' => link_for_liquid_layout.url, 'blurb' => (link_for_liquid_layout.blurb), 'body' => ninja_parse(link_for_liquid_layout.body), 'attachments' => (render :partial => "links/link_attachments", :locals => { :link => link_for_liquid_layout }), 'link_path' => (link_for_liquid_layout.restrict_link ? link_for_liquid_layout.url : link_category_link_path(link_for_liquid_layout.link_category, link_for_liquid_layout)), 'thumbnail' => thumbnail, 'large_image' => large_image, 'medium_image' => medium_image )
