@@ -66,6 +66,9 @@ class Admin::LinksController < AdminController
     @link = Link.new(params[:link])
     params[:link][:link_category_ids] ||= []
     @link.link_categories << LinkCategory.find(params[:link][:link_category_id]) unless params[:link][:link_category_id].blank? 
+    for link_category in @link.link_categories
+      expire_fragment("admin-link-category-#{link_category.id}")
+    end
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     if @link.save
       flash[:notice] = "Link \"#{@link.title}\" created."
@@ -93,6 +96,9 @@ class Admin::LinksController < AdminController
     params[:link][:link_category_ids] << params[:link][:link_category_id] unless params[:link][:link_category_id].blank?
     if @link.update_attributes(params[:link])
       #This is to removes link from categories if there are none selected
+      for link_category in @link.link_categories
+        expire_fragment("admin-link-category-#{link_category.id}")
+      end
       if !params[:link].has_key?("link_category_ids")
         @link.link_categories = []
         @link.save
@@ -111,6 +117,9 @@ class Admin::LinksController < AdminController
     expire_fragment("link-concise-#{@link.id}")
     expire_fragment("link-extended-#{@link.id}")
     expire_fragment("link-liquid-#{@link.id}")
+    for link_category in @link.link_categories
+      expire_fragment("admin-link-category-#{link_category.id}")
+    end
     @link.destroy
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     respond_to :js
