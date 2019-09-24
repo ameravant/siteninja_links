@@ -72,7 +72,7 @@ class LinksController < ApplicationController
         get_page_defaults(@page)
         render 'pages/show'
       else
-        #render_404 
+        render_404 
       end
     end
 
