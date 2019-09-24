@@ -1,4 +1,4 @@
-- cache(:controller => "links", :action => "index", :action_suffix => "link-#{link_for_liquid_layout.id}") do
+- cache("link-liquid-#{link_for_liquid_layout.id}") do
   - template = Liquid::Template.parse(link_loop)
   - if link_for_liquid_layout.images.empty?
     - thumbnail = ""

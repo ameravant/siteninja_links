@@ -2,7 +2,7 @@
   .category= link_to(link_category.title, [:edit, :admin, link_category])
   %ul.sortable{:id => "tree_#{link_category.id}"}
     - for link in link_category.links.sort_by(&:position)
-      - cache(:action => "index", :action_suffix => "link-#{link.id}")  do
+      - cache("admin-link-categorized-#{link.id}")  do
         %li{:id => "#{dom_id(link)}"}
           .link-title
             ==<i class='fas fa-grip-vertical'></i>

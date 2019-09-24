@@ -84,11 +84,11 @@ class Admin::LinksController < AdminController
   end
 
   def update
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-concise-#{@link.id}")
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-extended-#{@link.id}")
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-liquid-#{@link.id}")
+    expire_fragment("link-concise-#{@link.id}")
+    expire_fragment("link-extended-#{@link.id}")
+    expire_fragment("link-liquid-#{@link.id}")
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
-    expire_fragment(:controller => "admin/links", :action => "index", :action_suffix => "link-#{@link.id}")
+    expire_fragment("admin-link-categorized-#{@link.id}")
     params[:link][:link_category_ids] ||= []
     params[:link][:link_category_ids] << params[:link][:link_category_id] unless params[:link][:link_category_id].blank?
     if @link.update_attributes(params[:link])
@@ -108,9 +108,9 @@ class Admin::LinksController < AdminController
   end
 
   def destroy
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-concise-#{@link.id}")
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-extended-#{@link.id}")
-    expire_fragment(:controller => "links", :action => "index", :action_suffix => "link-liquid-#{@link.id}")
+    expire_fragment("link-concise-#{@link.id}")
+    expire_fragment("link-extended-#{@link.id}")
+    expire_fragment("link-liquid-#{@link.id}")
     @link.destroy
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     respond_to :js
