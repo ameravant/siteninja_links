@@ -63,6 +63,7 @@ class LinksController < ApplicationController
   end
 
   def get_links_side
+    render_404 if params[:page] == "../"
     if @cms_config['modules']['links']
       #render_404 unless 
       @page = Page.find_by_permalink("links")

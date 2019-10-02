@@ -4,6 +4,7 @@ class LinkCategoriesController < LinksController
   before_filter :authenticate, :only => :show
 
   def index
+    render_404 if params[:page] == "../"
     #expires_in 60.minutes, :public => true
     if !params[:tag].blank?
       # Filter link by tag
@@ -30,8 +31,9 @@ class LinkCategoriesController < LinksController
   end
 
   def show
-  #expires_in 60.minutes, :public => true
-  add_breadcrumb @cms_config['site_settings']['links_title'], 'link_categories_path'
+    render_404 if params[:page] == "../"
+    #expires_in 60.minutes, :public => true
+    add_breadcrumb @cms_config['site_settings']['links_title'], 'link_categories_path'
     @page = Page.find_by_permalink("links")
     #@main_column = ((@page.main_column_id.blank? or Column.find_by_id(@page.main_column_id).blank?) ? Column.first(:conditions => {:title => "Default", :column_location => "main_column"}) : Column.find(@page.main_column_id))
     @link_category = LinkCategory.find(params[:id])
