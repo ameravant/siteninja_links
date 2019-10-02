@@ -107,6 +107,8 @@
   jQuery(document).ready(function() {
   jQuery('a.icon').each(function() {
   var click = jQuery(this).attr('onclick')
+  if (click) {
   ==jQuery(this).attr('onclick', click.replace(/encodeURIComponent\('([^}]*)'\)/, 'encodeURIComponent("#{form_authenticity_token}")'))
+  }
   });
   });
