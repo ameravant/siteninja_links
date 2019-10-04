@@ -155,7 +155,10 @@
         });
         function addtext(text) {
         tinymce.get("link_body").insertContent(text);
-        }
+        } 
+        jQuery("#add-links").click(function() {
+        setupLinkFields("link_body");
+        })
 
 
       
