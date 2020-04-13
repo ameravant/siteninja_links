@@ -38,6 +38,8 @@
       = link_to "<i class=\"fas fa-plus-circle\"></i> Make a new #{@cms_config['site_settings']['link_title']}", new_admin_link_path
     %span.hmenu
       = link_to "<i class=\"far fa-folder\"></i> Manage Categories", admin_link_categories_path
+    %span.hmenu
+      = link_to("<i class=\"fas fa-save\"></i> Clear Link Cache", admin_links_path(:params => {:clear_cache => true}))
   =clear
   = render :partial => "paginated_index"
 - else

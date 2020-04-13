@@ -6,6 +6,18 @@ class Admin::LinksController < AdminController
 
   def index
     session[:redirect_path] = admin_links_path
+    if params[:clear_cache]
+      for link in Link.all
+        begin
+          expire_fragment("link-extended-#{link.id}")
+          expire_fragment("link-concise-#{link.id}")
+        rescue
+          # Do Nothing
+        end
+      end
+      flash[:notice] = "Link fragment caches cleared."
+      redirect_to admin_links_path
+    end
     # if params[:q].blank?
     #   @links = Link.all.sort_by(&:position)
     # else
