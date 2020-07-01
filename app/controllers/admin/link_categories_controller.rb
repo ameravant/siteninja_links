@@ -22,6 +22,7 @@ class Admin::LinkCategoriesController < AdminController
     @link_category = LinkCategory.new(params[:link_category])
     if @link_category.save
       flash[:notice] = "Category \"#{@link_category.title}\" created."
+      log_activity("Created \"#{@link_category.title}\"")
       redirect_to admin_link_categories_path
     else
       render :action => "new"
@@ -37,6 +38,7 @@ class Admin::LinkCategoriesController < AdminController
     add_breadcrumb @link_category.title
     if @link_category.update_attributes(params[:link_category])
       flash[:notice] = "Category \"#{@link_category.title}\" updated."
+      log_activity("Updated \"#{@link_category.title}\"")
       redirect_to admin_link_categories_path
     else
       render :action => "edit"
@@ -44,6 +46,7 @@ class Admin::LinkCategoriesController < AdminController
   end
 
   def destroy
+    log_activity("Deleted \"#{@link_category.title}\"")
     @link_category.destroy
     respond_to :js
   end
@@ -95,6 +98,10 @@ class Admin::LinkCategoriesController < AdminController
       flash[:error] = "Link category was not found. It may have been deleted."
       redirect_to admin_link_categories_path
     end
+  end
+
+  def log_activity(description)
+    add_activity(controller_name.classify, @link_category.id, description)
   end
 
   def authorization

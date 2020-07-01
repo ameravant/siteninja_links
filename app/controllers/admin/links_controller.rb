@@ -84,6 +84,7 @@ class Admin::LinksController < AdminController
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     if @link.save
       flash[:notice] = "Link \"#{@link.title}\" created."
+      log_activity("Created \"#{@link.title}\"")
       redirect_to admin_links_path
     else
       render :action => "new"
@@ -119,6 +120,7 @@ class Admin::LinksController < AdminController
       @link.link_category_ids = []
       @link.link_category_ids = ac_ids
       flash[:notice] = "Link \"#{@link.title}\" updated."
+      log_activity("Updated \"#{@link.title}\"")
       redirect_to params[:redirect_path] ? params[:redirect_path] : admin_links_path
     else
       render :action => "edit"
@@ -129,6 +131,7 @@ class Admin::LinksController < AdminController
     expire_fragment("link-concise-#{@link.id}")
     expire_fragment("link-extended-#{@link.id}")
     expire_fragment("link-liquid-#{@link.id}")
+    log_activity("Deleted \"#{@link.title}\"")
     for link_category in @link.link_categories
       expire_fragment("admin-link-category-#{link_category.id}")
     end
@@ -229,6 +232,10 @@ class Admin::LinksController < AdminController
 
   def find_link_categories
     @link_categories = LinkCategory.all
+  end
+
+  def log_activity(description)
+    add_activity(controller_name.classify, @link.id, description)
   end
 
   def authenticate
