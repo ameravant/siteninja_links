@@ -36,7 +36,11 @@ class LinksController < ApplicationController
     if @link_category.blank?
       render_404
     else
-      @menu = @link_category.menus.first if !@link_category.blank? and !@link_category.menus.empty?
+      if !@link_category.blank? and !@link_category.menus.empty?
+        @menu = @link_category.menus.first
+      elsif !@link_category.blank? and !@link_category.link_category.blank? and !@link_category.link_category.menus.empty?
+        @menu = @link_category.link_category.menus.first
+      end  
       add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
       add_breadcrumb @link.link_category.title, link_category_path(@link.link_category) if @link.link_category
       add_breadcrumb @link.title
