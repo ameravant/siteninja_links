@@ -27,9 +27,9 @@ class LinksController < ApplicationController
     #expires_in 60.minutes, :public => true
     @link = Link.find(params[:id], :conditions => {:public => true})
 
-    @edit_path = [:edit, :admin, @link]
+    @edit_path = edit_admin_link_path(@link, :params => {:redirect_path => request.request_uri})#[:edit, :admin, @link]
     @edit_type = "Link"
-    session[:redirect_path] = link_category_link_path(@link.link_category, @link)
+    #session[:redirect_path] = link_category_link_path(@link.link_category, @link)
 
     @images = @link.images
     @link_category = @link.link_category
@@ -40,6 +40,8 @@ class LinksController < ApplicationController
         @menu = @link_category.menus.first
       elsif !@link_category.blank? and !@link_category.link_category.blank? and !@link_category.link_category.menus.empty?
         @menu = @link_category.link_category.menus.first
+      else
+        @menu = @page.menus.first
       end  
       add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
       add_breadcrumb @link.link_category.title, link_category_path(@link.link_category) if @link.link_category

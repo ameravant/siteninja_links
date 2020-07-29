@@ -5,7 +5,7 @@ class Admin::LinksController < AdminController
   before_filter :find_link_categories, :only => [ :new, :create, :edit, :update, :index ]
 
   def index
-    session[:redirect_path] = admin_links_path
+    #session[:redirect_path] = admin_links_path
     if params[:clear_cache]
       for link in Link.all
         begin
@@ -121,7 +121,7 @@ class Admin::LinksController < AdminController
       @link.link_category_ids = ac_ids
       flash[:notice] = "Link \"#{@link.title}\" updated."
       log_activity("Updated \"#{@link.title}\"")
-      redirect_to params[:redirect_path] ? params[:redirect_path] : admin_links_path
+      redirect_to !params[:redirect_path].blank? ? params[:redirect_path] : admin_links_path
     else
       render :action => "edit"
     end
