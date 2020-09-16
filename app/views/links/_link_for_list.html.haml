@@ -1,25 +1,26 @@
-%div{:class => "link_for_list #{"featured" if link_for_list.featured}"}
-  - if link_for_list.restrict_link
-    %h2=link_to(link_for_list.title, link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
-  - else
-    %h2= link_to(link_for_list.title, [link_for_list.link_category, link_for_list])
-  - unless link_for_list.images.empty?
-    %div{:class => "images"}
-      - image = link_for_list.images.sort_by(&:position).first
-      - if link_for_list.restrict_link
-        = image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title)
-      - else
-        - if @cms_config['site_settings']['link_images_to_site']
-          = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
+- cache("link-for-list-#{link_for_list.id}") do
+  %div{:class => "link_for_list #{"featured" if link_for_list.featured}"}
+    - if link_for_list.restrict_link
+      %h2=link_to(link_for_list.title, link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
+    - else
+      %h2= link_to(link_for_list.title, [link_for_list.link_category, link_for_list])
+    - unless link_for_list.images.empty?
+      %div{:class => "images"}
+        - image = link_for_list.images.sort_by(&:position).first
+        - if link_for_list.restrict_link
+          = image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title)
         - else
-          = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), [link_for_list.link_category, link_for_list], :title => h(image.image_title))
-      = clear
-  - unless link_for_list.blurb.blank?
-    = simple_format(link_for_list.blurb)
-  .visit-site
-    - unless link_for_list.url.blank?
-      = link_to("#{@cms_config['site_settings']['visit_link_text'] ? @cms_config['site_settings']['visit_link_text'] : 'Visit site'}", link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
-  = clear
+          - if @cms_config['site_settings']['link_images_to_site']
+            = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
+          - else
+            = link_to(image_tag(image.thumbnail, :alt => image.image_title, :title => image.image_title), [link_for_list.link_category, link_for_list], :title => h(image.image_title))
+        = clear
+    - unless link_for_list.blurb.blank?
+      = simple_format(link_for_list.blurb)
+    .visit-site
+      - unless link_for_list.url.blank?
+        = link_to("#{@cms_config['site_settings']['visit_link_text'] ? @cms_config['site_settings']['visit_link_text'] : 'Visit site'}", link_for_list.url, :target => "#{@cms_config['site_settings']['links_in_new_window'] ? '_blank' : ''}")
+    = clear
   
 - content_for :head do
   %style{:type => "text/css"}

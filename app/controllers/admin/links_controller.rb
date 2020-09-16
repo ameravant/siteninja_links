@@ -11,6 +11,7 @@ class Admin::LinksController < AdminController
         begin
           expire_fragment("link-extended-#{link.id}")
           expire_fragment("link-concise-#{link.id}")
+          expire_fragment("link-for-list-#{link.id}")
         rescue
           # Do Nothing
         end
@@ -103,6 +104,7 @@ class Admin::LinksController < AdminController
     expire_fragment("link-concise-#{@link.id}")
     expire_fragment("link-extended-#{@link.id}")
     expire_fragment("link-liquid-#{@link.id}")
+    expire_fragment("link-for-list-#{@link.id}")
     #expire_fragment(:controller => 'admin/links', :action => 'index', :action_suffix => 'all_links')
     expire_fragment("admin-link-categorized-#{@link.id}")
     params[:link][:link_category_ids] ||= []
@@ -131,6 +133,7 @@ class Admin::LinksController < AdminController
     expire_fragment("link-concise-#{@link.id}")
     expire_fragment("link-extended-#{@link.id}")
     expire_fragment("link-liquid-#{@link.id}")
+    expire_fragment("link-for-list-#{@link.id}")
     log_activity("Deleted \"#{@link.title}\"")
     for link_category in @link.link_categories
       expire_fragment("admin-link-category-#{link_category.id}")
