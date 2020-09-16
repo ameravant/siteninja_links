@@ -9,7 +9,8 @@ class LinksController < ApplicationController
     count = (@cms_config['site_settings']['links_pagination_count'] and !@cms_config['site_settings']['links_pagination_count'].blank?) ? @cms_config['site_settings']['links_pagination_count'] : 20
     if !params[:tag].blank?
       # Filter link by tag
-      @links = Link.active.find_tagged_with(params[:tag]).paginate(:page => params[:page], :per_page => count)
+      #@links = Link.active.find_tagged_with(params[:tag]).paginate(:page => params[:page], :per_page => count)
+      @links = Link.find(:all, :conditions => {:public => true}, :order => @cms_config['site_settings']['links_alphabetical'] ? :title : :position).paginate(:page => params[:page], :per_page => count) #removing tag filtering for performance issues.
       add_breadcrumb @cms_config['site_settings']['links_title'], link_categories_path
       add_breadcrumb params[:tag]
     else
