@@ -7,7 +7,7 @@
     .note.required *Required
     %h2.form-label= f.label :description
     .note Displayed on Link Category page, under Title.
-    = f.text_area :description, :class => "big-area"
+    = f.text_area :description, :class => "#{@cms_config["site_settings"]["wysiwyg_link_category_description"] ? "mceEditor" : "big-area"}"
     - if current_user.is_super_user and !@link_category.permalink.blank?
       %h2.title.form-label= f.label :permalink, "Permalink"
       = f.text_field :permalink, :class => "big-input", :disabled => @no_edit
