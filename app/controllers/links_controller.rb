@@ -1,7 +1,7 @@
 class LinksController < ApplicationController
   unloadable
   before_filter :get_links_side
-  before_filter :authenticate, :only => :show, :index
+  before_filter :authenticate, :only => [:show, :index]
   add_breadcrumb "Home", "root_path"
 
   def index
