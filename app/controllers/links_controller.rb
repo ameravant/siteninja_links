@@ -1,7 +1,7 @@
 class LinksController < ApplicationController
   unloadable
   before_filter :get_links_side
-  before_filter :authenticate, :only => :show
+  before_filter :authenticate, :only => :show, :index
   add_breadcrumb "Home", "root_path"
 
   def index
@@ -101,7 +101,7 @@ class LinksController < ApplicationController
       else
         find_parent(@link_category.link_category)
       end
-      if @cms_config['modules']['members'] && @parent_category.permission_level != "everyone"
+      if @cms_config['modules']['members'] && @parent_category && @parent_category.permission_level != "everyone"
         session[:redirect] = request.request_uri
         authorize(@parent_category.person_groups.collect{|p| p.title}, @parent_category.title)
       end
