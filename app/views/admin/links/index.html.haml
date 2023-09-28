@@ -40,6 +40,8 @@
       = link_to "<i class=\"far fa-folder\"></i> Manage Categories", admin_link_categories_path
     %span.hmenu
       = link_to("<i class=\"fas fa-save\"></i> Clear Link Cache", admin_links_path(:params => {:clear_cache => true}))
+    %span.hmenu
+      = link_to("<i class=\"fas fa-save\"></i> Export CSV", admin_link_path(Link.first(:order => "id"), :params => {:render => true}))
   =clear
   = render :partial => "paginated_index"
 - else
@@ -60,6 +62,8 @@
       = link_to "<i class=\"far fa-folder\"></i> Manage Categories", admin_link_categories_path
     %span.hmenu
       = link_to("<i class=\"fas fa-save\"></i> Clear Link Cache", admin_links_path(:params => {:clear_cache => true}))
+    %span.hmenu
+      = link_to("<i class=\"fas fa-save\"></i> Export CSV", admin_link_path(Link.first, :params => {:render => true}))
 
   %br
   %div.link-title-header

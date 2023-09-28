@@ -1,0 +1,5 @@
+- if params[:render]
+  %h2 Preparing Links...
+  = form_tag("/admin/links/save_render", :method => "put", :id => "update_render", :style => "display: none;")
+  = render :partial => "render"
+  </form>

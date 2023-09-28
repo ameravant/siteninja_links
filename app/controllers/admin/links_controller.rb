@@ -3,56 +3,111 @@ class Admin::LinksController < AdminController
   before_filter :authenticate
   before_filter :find_link, :only => [ :edit, :update, :destroy, :show ]
   before_filter :find_link_categories, :only => [ :new, :create, :edit, :update, :index ]
+  require 'fastercsv'
+  require 'csv'
+
+  def save_render
+    link = Link.find(params[:link][:id])
+    link.update_attributes(:rendered_body => params[:link][:rendered_body])
+    if link == Link.all(:order => "id").last
+      redirect_to ("/admin/links?csv=true")
+    else
+      next_link = Link.all(:order => "id", :conditions => ['id > ?', link.id]).first
+      redirect_to("/admin/links/#{next_link.id}-#{next_link.permalink}?render=true")
+    end
+  end
 
   def index
-    #session[:redirect_path] = admin_links_path
-    if params[:clear_cache]
-      for link in Link.all
-        begin
-          expire_fragment("link-extended-#{link.id}")
-          expire_fragment("link-concise-#{link.id}")
-          expire_fragment("link-for-list-#{link.id}")
-          expire_fragment("link-liquid-#{link.id}")
-        rescue
-          # Do Nothing
+    if params[:csv]
+      redirect_to("/admin/links.csv")
+    else
+      #session[:redirect_path] = admin_links_path
+      if params[:clear_cache]
+        for link in Link.all
+          begin
+            expire_fragment("link-extended-#{link.id}")
+            expire_fragment("link-concise-#{link.id}")
+            expire_fragment("link-for-list-#{link.id}")
+            expire_fragment("link-liquid-#{link.id}")
+          rescue
+            # Do Nothing
+          end
         end
+        flash[:notice] = "Link fragment caches cleared."
+        redirect_to admin_links_path
       end
-      flash[:notice] = "Link fragment caches cleared."
-      redirect_to admin_links_path
-    end
-    # if params[:q].blank?
-    #   @links = Link.all.sort_by(&:position)
-    # else
-    #   @links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"])
-    # end
-    add_breadcrumb @cms_config['site_settings']['links_title']
-    
-    
-    if params[:default_view]
-      if params[:default_view] == "paginate"
+      # if params[:q].blank?
+      #   @links = Link.all.sort_by(&:position)
+      # else
+      #   @links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"])
+      # end
+      add_breadcrumb @cms_config['site_settings']['links_title']
+      
+      
+      if params[:default_view]
+        if params[:default_view] == "paginate"
+          session[:link_index] = "paginate"
+          @cms_config["site_settings"]["paginate_link_index"] = true
+        elsif params[:default_view] == "categories"
+          session[:link_index] = "categories"
+          @cms_config["site_settings"]["paginate_link_index"] = false
+        end
+        flash[:notice] = "Default view updated successfully."
+        File.open(@cms_path, 'w') { |f| YAML.dump(@cms_config, f) }
+        redirect_to(admin_links_path)
+      end
+      if (@cms_config['site_settings']['paginate_link_index'] or params[:paginate_link_index] or session[:link_index] == "paginate") and (params[:paginate_link_index] != "false")
         session[:link_index] = "paginate"
-        @cms_config["site_settings"]["paginate_link_index"] = true
-      elsif params[:default_view] == "categories"
+        @paginate_link_index = true
+        if params[:letter]
+          links = Link.all(:conditions => ["title like ?", "#{params[:letter]}%"])
+        else
+          params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
+        end
+        @links = links.paginate(:page => params[:page], :per_page => 20)
+      elsif params[:paginate_link_index] == "false"
         session[:link_index] = "categories"
-        @cms_config["site_settings"]["paginate_link_index"] = false
+        @paginate_link_index = false
       end
-      flash[:notice] = "Default view updated successfully."
-      File.open(@cms_path, 'w') { |f| YAML.dump(@cms_config, f) }
-      redirect_to(admin_links_path)
-    end
-    if (@cms_config['site_settings']['paginate_link_index'] or params[:paginate_link_index] or session[:link_index] == "paginate") and (params[:paginate_link_index] != "false")
-      session[:link_index] = "paginate"
-      @paginate_link_index = true
-      if params[:letter]
-        links = Link.all(:conditions => ["title like ?", "#{params[:letter]}%"])
-      else
-        params[:q].blank? ? links = Link.all(:order => "title") : links = Link.find(:all, :conditions => ["title like ?", "%#{params[:q]}%"], :order => "title")
+
+      # Export CSV
+      respond_to do |wants|
+        require 'fastercsv'
+        @all_links = Link.all
+        wants.html
+        wants.csv do
+          @outfile = "links_" + Time.now.strftime("%Y-%m-%d-%H-%M-%S") + ".csv"
+          csv_data = FasterCSV.generate do |csv|
+            csv << ["ID", "Title", "Content", "Excerpt", "Site URL", "Date", "Post Type", "Permalink", "Image URL", "Image Title", "Image Caption", "Image Description", "Image Alt Text", "Image Featured", "Attachment URL", "Categories", "Status", "Slug", "Comment Status", "Ping Status", "Post Modified Date"]#, "images_count", "assets_count", "features_count"]
+            @all_links.each do |link|
+              link_body = link.rendered_body.blank? ? link.body : link.rendered_body.gsub('data-src', 'src')
+              i = Image.first(:conditions => {:viewable_id => link.id, :viewable_type => "Link", :show_as_cover_image => true})
+              i = Image.first(:conditions => {:viewable_id => link.id, :viewable_type => "Link", :show_in_image_box => true}) if i.blank?
+              i = Image.first(:conditions => {:viewable_id => link.id, :viewable_type => "Link", :show_in_slideshow => true}) if i.blank?
+              if !i.blank?
+                image_url = i.image(:original)
+                image_title = i.title
+                image_caption = i.caption
+                image_description = i.description
+              else
+                image_url = ""
+                image_title = ""
+                image_caption = ""
+                image_description = ""
+              end
+              images = Image.all(:conditions => {:viewable_id => link.id, :viewable_type => "Link"}, :order => "show_as_cover_image, position asc")
+              status = link.public ? "publish" : "draft"
+              
+              csv << [link.id, link.title, link_body, link.blurb, link.url, link.created_at.strftime("%Y-%m-%d %H:%M:%S"), "listing", link_url(link), images.collect{|i| i.image(:original)}.join(','), images.collect{|i| i.title}.join(','), images.collect{|i| i.caption}.join(','), images.collect{|i| i.description}.join(','), images.collect{|i| i.title}.join(','), image_url, "", link.link_categories.collect{|lc| lc.title}.join(','), status, link.permalink, "closed", "closed", link.updated_at.strftime("%Y-%m-%d %H:%M:%S")]
+            end
+          end
+          send_data csv_data,
+          :type => 'text/csv; charset=iso-8859-1; header=present',
+          :disposition => "attachment; filename=#{@outfile}"
+          flash[:notice] = "Export complete!"
       end
-      @links = links.paginate(:page => params[:page], :per_page => 20)
-    elsif params[:paginate_link_index] == "false"
-      session[:link_index] = "categories"
-      @paginate_link_index = false
     end
+  end
   end
 
   def show
